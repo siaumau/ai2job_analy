@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上班族工作痛點調查 - 找到您的效率提升方案</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .progress-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .survey-section {
+            background: #f8f9fa;
+            margin: 25px 0;
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #ff6b6b;
+            animation: slideInLeft 0.8s ease;
+        }
+
+        .section-title {
+            color: #2d3436;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .question-group {
+            margin: 20px 0;
+        }
+
+        .question {
+            font-weight: bold;
+            color: #2d3436;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .options {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option {
+            background: white;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .option:hover {
+            border-color: #ff6b6b;
+            background: #fff5f5;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            border-color: #ff6b6b;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            transform: translateX(10px);
+        }
+
+        .option-icon {
+            font-size: 1.5em;
+            min-width: 30px;
+        }
+
+        .intensity-slider {
+            margin: 20px 0;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .slider {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ff6b6b;
+            cursor: pointer;
+        }
+
+        .slider-label {
+            font-weight: bold;
+            min-width: 60px;
+            text-align: center;
+            color: #2d3436;
+        }
+
+        .multi-select-note {
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+        }
+
+        .result-section {
+            display: none;
+            background: linear-gradient(135deg, #a8e6cf 0%, #88d8a3 100%);
+            padding: 40px;
+            margin-top: 30px;
+            border-radius: 15px;
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        .result-title {
+            font-size: 2em;
+            color: #2d3436;
+            margin-bottom: 20px;
+        }
+
+        .pain-point-analysis {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .recommendations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .recommendation-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #ff6b6b;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .priority-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .priority-high {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .priority-medium {
+            background: #fdcb6e;
+            color: #2d3436;
+        }
+
+        .priority-low {
+            background: #74b9ff;
+            color: white;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💼 工作效率痛點調查</h1>
+            <p>3分鐘找到最適合您的效率提升方案</p>
+        </div>
+
+        <div class="content">
+            <div class="progress-container">
+                <h3>📊 調查進度</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <span id="progressText">0% 完成</span>
+            </div>
+
+            <!-- 基本資訊 -->
+            <div class="survey-section">
+                <h2 class="section-title">👤 基本資訊</h2>
+
+                <div class="question-group">
+                    <div class="question">您的工作性質主要是？</div>
+                    <div class="options">
+                        <div class="option" onclick="selectSingle(this, 'jobType')" data-value="admin">
+                            <span class="option-icon">📋</span>
+                            <span>行政文書（處理文件、資料整理、會議安排等）</span>
+                        </div>
+                        <div class="option" onclick="selectSingle(this, 'jobType')" data-value="sales">
+                            <span class="option-icon">💼</span>
+                            <span>業務銷售（客戶拜訪、報價、合約處理等）</span>
+                        </div>
+                        <div class="option" onclick="selectSingle(this, 'jobType')" data-value="marketing">
+                            <span class="option-icon">📱</span>
+                            <span>行銷企劃（活動策劃、內容創作、數據分析等）</span>
+                        </div>
+                        <div class="option" onclick="selectSingle(this, 'jobType')" data-value="hr">
+                            <span class="option-icon">👥</span>
+                            <span>人資管理（招募、培訓、薪資、員工關係等）</span>
+                        </div>
+                        <div class="option" onclick="selectSingle(this, 'jobType')" data-value="finance">
+                            <span class="option-icon">💰</span>
+                            <span>財務會計（記帳、報表、預算、分析等）</span>
+                        </div>
+                        <div class="option" onclick="selectSingle(this, 'jobType')" data-value="it">
+                            <span class="option-icon">💻</span>
+                            <span>資訊技術（系統維護、程式開發、技術支援等）</span>
+                        </div>
+                        <div class="option" onclick="selectSingle(this, 'jobType')" data-value="management">
+                            <span class="option-icon">👔</span>
+                            <span>管理職（團隊管理、決策制定、策略規劃等）</span>
+                        </div>
+                        <div class="option" onclick="selectSingle(this, 'jobType')" data-value="other">
+                            <span class="option-icon">🔧</span>
+                            <span>其他專業職（設計、工程、法務、採購等）</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">您的公司規模？</div>
+                    <div class="options">
+                        <div class="option" onclick="selectSingle(this, 'companySize')" data-value="small">
+                            <span class="option-icon">🏪</span>
+                            <span>小型企業（1-50人）</span>
+                        </div>
+                        <div class="option" onclick="selectSingle(this, 'companySize')" data-value="medium">
+                            <span class="option-icon">🏢</span>
+                            <span>中型企業（51-500人）</span>
+                        </div>
+                        <div class="option" onclick="selectSingle(this, 'companySize')" data-value="large">
+                            <span class="option-icon">🏬</span>
+                            <span>大型企業（500人以上）</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 主要痛點識別 -->
+            <div class="survey-section">
+                <h2 class="section-title">😤 主要工作痛點</h2>
+                <div class="multi-select-note">※ 可以選擇多個選項，請選出所有困擾您的問題</div>
+
+                <div class="question-group">
+                    <div class="question">以下哪些問題經常困擾您？</div>
+                    <div class="options">
+                        <div class="option" onclick="selectMultiple(this, 'painPoints')" data-value="repetitive">
+                            <span class="option-icon">🔄</span>
+                            <span>重複性工作太多，浪費大量時間在複製貼貼、資料輸入</span>
+                        </div>
+                        <div class="option" onclick="selectMultiple(this, 'painPoints')" data-value="communication">
+                            <span class="option-icon">💬</span>
+                            <span>跨部門溝通困難，訊息傳遞不順暢，常常雞同鴨講</span>
+                        </div>
+                        <div class="option" onclick="selectMultiple(this, 'painPoints')" data-value="dataManagement">
+                            <span class="option-icon">📊</span>
+                            <span>資料管理混亂，找不到檔案，版本控制困難</span>
+                        </div>
+                        <div class="option" onclick="selectMultiple(this, 'painPoints')" data-value="timeManagement">
+                            <span class="option-icon">⏰</span>
+                            <span>時間管理困難，工作排程混亂，常常加班趕工</span>
+                        </div>
+                        <div class="option" onclick="selectMultiple(this, 'painPoints')" data-value="meetings">
+                            <span class="option-icon">🤝</span>
+                            <span>會議效率低，開會時間長但決議少，後續追蹤困難</span>
+                        </div>
+                        <div class="option" onclick="selectMultiple(this, 'painPoints')" data-value="reporting">
+                            <span class="option-icon">📈</span>
+                            <span>報表製作耗時，數據整理複雜，經常出錯</span>
+                        </div>
+                        <div class="option" onclick="selectMultiple(this, 'painPoints')" data-value="approval">
+                            <span class="option-icon">✍️</span>
+                            <span>簽核流程繁瑣，審批速度慢，影響工作進度</span>
+                        </div>
+                        <div class="option" onclick="selectMultiple(this, 'painPoints')" data-value="customerService">
+                            <span class="option-icon">📞</span>
+                            <span>客戶服務回應慢，客戶資料分散，服務品質不一致</span>
+                        </div>
+                        <div class="option" onclick="selectMultiple(this, 'painPoints')" data-value="projectManagement">
+                            <span class="option-icon">📋</span>
+                            <span>專案管理困難，進度追蹤不易，團隊協作效率差</span>
+                        </div>
+                        <div class="option" onclick="selectMultiple(this, 'painPoints')" data-value="learning">
+                            <span class="option-icon">📚</span>
+                            <span>學習新技能困難，缺乏系統性培訓，跟不上技術發展</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 痛點強度評估 -->
+            <div class="survey-section">
+                <h2 class="section-title">📊 痛點影響程度</h2>
+
+                <div class="question-group">
+                    <div class="question">這些工作問題對您的影響程度？</div>
+                    <div class="intensity-slider">
+                        <div class="slider-container">
+                            <span class="slider-label">輕微影響</span>
+                            <input type="range" min="1" max="10" value="5" class="slider" id="impactLevel" oninput="updateSliderValue(this)">
+                            <span class="slider-label">嚴重影響</span>
+                        </div>
+                        <div style="text-align: center; margin-top: 10px;">
+                            <strong>影響程度：<span id="impactValue">5</span>/10</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">您每天花多少時間在這些低效率的工作上？</div>
+                    <div class="options">
+                        <div class="option" onclick="selectSingle(this, 'timeWasted')" data-value="1hour">
+                            <span class="option-icon">⏱️</span>
+                            <span>1小時以內</span>
+                        </div>
+                        <div class="option" onclick="selectSingle(this, 'timeWasted')" data-value="2-3hours">
+                            <span class="option-icon">⏰</span>
+                            <span>2-3小時</span>
+                        </div>
+                        <div class="option" onclick="selectSingle(this, 'timeWasted')" data-value="4-5hours">
+                            <span class="option-icon">🕐</span>
+                            <span>4-5小時</span>
+                        </div>
+                        <div class="option" onclick="selectSingle(this, 'timeWasted')" data-value="6hours+">
+                            <span class="option-icon">😵</span>
+                            <span>6小時以上（幾乎整天）</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 解決方案期待 -->
+            <div class="survey-section">
+                <h2 class="section-title">🎯 解決方案期待</h2>
+
+                <div class="question-group">
+                    <div class="question">您最希望通過什麼方式來提升工作效率？</div>
+                    <div class="multi-select-note">※ 可選擇多個選項</div>
+                    <div class="options">
+                        <div class="option" onclick="selectMultiple(this, 'solutionPreference')" data-value="automation">
+                            <span class="option-icon">🤖</span>
+                            <span>自動化工具，減少重複性工作</span>
+                        </div>
+                        <div class="option" onclick="selectMultiple(this, 'solutionPreference')" data-value="collaboration">
+                            <span class="option-icon">👥</span>
+                            <span>協作平台，改善團隊溝通</span>
+                        </div>
+                        <div class="option" onclick="selectMultiple(this, 'solutionPreference')" data-value="dataAnalysis">
+                            <span class="option-icon">📊</span>
+                            <span>數據分析工具，快速產出報表</span>
+                        </div>
+                        <div class="option" onclick="selectMultiple(this, 'solutionPreference')" data-value="projectTool">
+                            <span class="option-icon">📋</span>
+                            <span>專案管理工具，提升協作效率</span>
+                        </div>
+                        <div class="option" onclick="selectMultiple(this, 'solutionPreference')" data-value="aiAssistant">
+                            <span class="option-icon">🧠</span>
+                            <span>AI助手，協助決策和內容創作</span>
+                        </div>
+                        <div class="option" onclick="selectMultiple(this, 'solutionPreference')" data-value="training">
+                            <span class="option-icon">🎓</span>
+                            <span>技能培訓，提升個人能力</span>
+                        </div>
+                        <div class="option" onclick="selectMultiple(this, 'solutionPreference')" data-value="process">
+                            <span class="option-icon">⚙️</span>
+                            <span>流程優化，重新設計工作方式</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">您希望多快看到改善效果？</div>
+                    <div class="options">
+                        <div class="option" onclick="selectSingle(this, 'timeExpectation')" data-value="immediate">
+                            <span class="option-icon">⚡</span>
+                            <span>立即見效（1週內）</span>
+                        </div>
+                        <div class="option" onclick="selectSingle(this, 'timeExpectation')" data-value="short">
+                            <span class="option-icon">📅</span>
+                            <span>短期改善（1個月內）</span>
+                        </div>
+                        <div class="option" onclick="selectSingle(this, 'timeExpectation')" data-value="medium">
+                            <span class="option-icon">🗓️</span>
+                            <span>中期改善（3個月內）</span>
+                        </div>
+                        <div class="option" onclick="selectSingle(this, 'timeExpectation')" data-value="long">
+                            <span class="option-icon">📆</span>
+                            <span>長期改善（半年以上）</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">您最關注解決方案的哪個特點？</div>
+                    <div class="options">
+                        <div class="option" onclick="selectSingle(this, 'solutionFocus')" data-value="easyUse">
+                            <span class="option-icon">😊</span>
+                            <span>簡單易用，學習成本低</span>
+                        </div>
+                        <div class="option" onclick="selectSingle(this, 'solutionFocus')" data-value="powerful">
+                            <span class="option-icon">💪</span>
+                            <span>功能強大，能解決複雜問題</span>
+                        </div>
+                        <div class="option" onclick="selectSingle(this, 'solutionFocus')" data-value="costEffective">
+                            <span class="option-icon">💰</span>
+                            <span>性價比高，投資報酬率佳</span>
+                        </div>
+                        <div class="option" onclick="selectSingle(this, 'solutionFocus')" data-value="integration">
+                            <span class="option-icon">🔗</span>
+                            <span>整合性佳，與現有系統搭配</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="submit-btn" onclick="generateAnalysis()" id="submitBtn">
+                🔍 立即分析我的痛點與解決方案
+            </button>
+
+            <!-- 結果分析區域 -->
+            <div class="result-section" id="resultSection">
+                <h2 class="result-title">📋 您的工作效率分析報告</h2>
+                <div id="analysisContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let surveyData = {
+            jobType: null,
+            companySize: null,
+            painPoints: [],
+            impactLevel: 5,
+            timeWasted: null,
+            solutionPreference: [],
+            timeExpectation: null,
+            solutionFocus: null
+        };
+
+        let totalQuestions = 8;
+        let answeredQuestions = 0;
+
+        function selectSingle(element, category) {
+            // 移除同類別的其他選項
+            const group = element.parentElement;
+            group.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+
+            // 選擇當前選項
+            element.classList.add('selected');
+
+            // 更新數據
+            const oldValue = surveyData[category];
+            surveyData[category] = element.getAttribute('data-value');
+
+            // 更新進度
+            if (oldValue === null) answeredQuestions++;
+            updateProgress();
+        }
+
+        function selectMultiple(element, category) {
+            // 切換選項狀態
+            element.classList.toggle('selected');
+
+            const value = element.getAttribute('data-value');
+            const index = surveyData[category].indexOf(value);
+
+            if (index > -1) {
+                surveyData[category].splice(index, 1);
+            } else {
+                surveyData[category].push(value);
+            }
+
+            // 更新進度（多選題只要有選就算完成）
+            const wasAnswered = category === 'painPoints' ? surveyData.painPoints.length > 0 : surveyData.solutionPreference.length > 0;
+            updateProgress();
+        }
+
+        function updateSliderValue(slider) {
+            surveyData.impactLevel = parseInt(slider.value);
+            document.getElementById('impactValue').textContent = slider.value;
+        }
+
+        function updateProgress() {
+            let completed = 0;
+            if (surveyData.jobType) completed++;
+            if (surveyData.companySize) completed++;
+            if (surveyData.painPoints.length > 0) completed++;
+            if (surveyData.timeWasted) completed++;
+            if (surveyData.solutionPreference.length > 0) completed++;
+            if (surveyData.timeExpectation) completed++;
+            if (surveyData.solutionFocus) completed++;
+            // impactLevel 預設有值，所以算完成
+            completed++;
+
+            const percentage = Math.round((completed / totalQuestions) * 100);
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = percentage + '% 完成';
+        }
+
+        function generateAnalysis() {
+            // 檢查必填項目
+            if (!surveyData.jobType || !surveyData.companySize ||
+                surveyData.painPoints.length === 0 || !surveyData.timeWasted ||
+                surveyData.solutionPreference.length === 0 || !surveyData.timeExpectation ||
+                !surveyData.solutionFocus) {
+                alert('請完成所有問題再進行分析！');
+                return;
+            }
+
+            const analysisContent = document.getElementById('analysisContent');
+            const resultSection = document.getElementById('resultSection');
+
+            // 生成分析內容
+            analysisContent.innerHTML = generateAnalysisHTML();
+
+            // 顯示結果
+            resultSection.style.display = 'block';
+            resultSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function generateAnalysisHTML() {
+            const jobTypeNames = {
+                'admin': '行政文書',
+                'sales': '業務銷售',
+                'marketing': '行銷企劃',
+                'hr': '人資管理',
+                'finance': '財務會計',
+                'it': '資訊技術',
+                'management': '管理職',
+                'other': '其他專業職'
+            };
+
+            const painPointNames = {
+                'repetitive': '重複性工作過多',
+                'communication': '跨部門溝通困難',
+                'dataManagement': '資料管理混亂',
+                'timeManagement': '時間管理困難',
+                'meetings': '會議效率低',
+                'reporting': '報表製作耗時',
+                'approval': '簽核流程繁瑣',
+                'customerService': '客戶服務回應慢',
+                'projectManagement': '專案管理困難',
+                'learning': '學習新技能困難'
+            };
+
+            const timeWastedNames = {
+                '1hour': '1小時以內',
+                '2-3hours': '2-3小時',
+                '4-5hours': '4-5小時',
+                '6hours+': '6小時以上'
+            };
+
+            // 根據痛點和職業生成個人化建議
+            const recommendations = generateRecommendations();
+
+            return `
+                <div class="pain-point-analysis">
+                    <h3>🎯 您的工作現況分析</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0;">
+                        <div style="background: #e3f2fd; padding: 15px; border-radius: 10px; text-align: center;">
+                            <strong>職業類型</strong><br>
+                            <span style="color: #1976d2; font-size: 1.2em;">${jobTypeNames[surveyData.jobType]}</span>
+                        </div>
+                        <div style="background: #f3e5f5; padding: 15px; border-radius: 10px; text-align: center;">
+                            <strong>影響程度</strong><br>
+                            <span style="color: #7b1fa2; font-size: 1.2em;">${surveyData.impactLevel}/10</span>
+                        </div>
+                        <div style="background: #fff3e0; padding: 15px; border-radius: 10px; text-align: center;">
+                            <strong>浪費時間</strong><br>
+                            <span style="color: #f57c00; font-size: 1.2em;">${timeWastedNames[surveyData.timeWasted]}</span>
+                        </div>
+                    </div>
+
+                    <h4>🔍 主要痛點識別</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0;">
+                        ${surveyData.painPoints.map(point =>
+                            `<span style="background: #ffebee; color: #c62828; padding: 8px 15px; border-radius: 20px; font-size: 0.9em;">
+                                ${painPointNames[point]}
+                            </span>`
+                        ).join('')}
+                    </div>
+                </div>
+
+                <div class="recommendations">
+                    ${recommendations.map(rec => `
+                        <div class="recommendation-card">
+                            <div class="priority-badge priority-${rec.priority}">${rec.priorityText}</div>
+                            <h4>${rec.title}</h4>
+                            <p>${rec.description}</p>
+                            <div style="margin-top: 15px;">
+                                <strong>🎯 預期效益：</strong>${rec.benefits}<br>
+                                <strong>⏱️ 實施時程：</strong>${rec.timeline}<br>
+                                <strong>💰 投資程度：</strong>${rec.investment}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div style="background: #e8f5e8; padding: 25px; border-radius: 15px; margin-top: 30px; border-left: 4px solid #4caf50;">
+                    <h3>🚀 立即行動建議</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                        <div>
+                            <h4>📋 第一週可以做的</h4>
+                            <ul style="text-align: left;">
+                                ${generateImmediateActions()}
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>📈 一個月內的目標</h4>
+                            <ul style="text-align: left;">
+                                ${generateShortTermGoals()}
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>🎯 三個月的願景</h4>
+                            <ul style="text-align: left;">
+                                ${generateLongTermGoals()}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: #fff3e0; padding: 20px; border-radius: 15px; margin-top: 20px; text-align: center;">
+                    <h3>💡 個人化學習建議</h3>
+                    <p>根據您的需求，我們建議您從以下技能開始學習：</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 15px;">
+                        ${generateLearningRecommendations().map(skill =>
+                            `<span style="background: #4caf50; color: white; padding: 10px 20px; border-radius: 25px; font-weight: bold;">
+                                ${skill}
+                            </span>`
+                        ).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateRecommendations() {
+            const recommendations = [];
+
+            // Based on pain points, generate specific recommendations
+            if (surveyData.painPoints.includes('repetitive')) {
+                recommendations.push({
+                    title: '🤖 導入自動化工具',
+                    description: '使用 No Code 自動化平台（如 Microsoft Power Automate、Zapier）來處理重複性工作，如資料輸入、郵件發送、報表生成等。',
+                    benefits: '節省70%重複工作時間',
+                    timeline: '2-4週',
+                    investment: '中等',
+                    priority: 'high',
+                    priorityText: '高優先'
+                });
+            }
+
+            if (surveyData.painPoints.includes('communication')) {
+                recommendations.push({
+                    title: '💬 建立協作平台',
+                    description: '導入整合式協作工具（如 Microsoft Teams、Slack），建立標準化的溝通流程和知識庫。',
+                    benefits: '提升溝通效率50%',
+                    timeline: '3-6週',
+                    investment: '低-中等',
+                    priority: 'high',
+                    priorityText: '高優先'
+                });
+            }
+
+            if (surveyData.painPoints.includes('dataManagement')) {
+                recommendations.push({
+                    title: '📊 數據管理系統',
+                    description: '建立雲端文件管理系統，使用版本控制和標準化命名規則，讓資料井然有序。',
+                    benefits: '降低找檔案時間80%',
+                    timeline: '4-8週',
+                    investment: '中等',
+                    priority: 'medium',
+                    priorityText: '中優先'
+                });
+            }
+
+            if (surveyData.painPoints.includes('timeManagement')) {
+                recommendations.push({
+                    title: '⏰ 智能時間管理',
+                    description: '使用AI輔助的行事曆和任務管理工具，自動安排優先順序和時間分配。',
+                    benefits: '提升時間利用率40%',
+                    timeline: '1-2週',
+                    investment: '低',
+                    priority: 'medium',
+                    priorityText: '中優先'
+                });
+            }
+
+            if (surveyData.painPoints.includes('reporting')) {
+                recommendations.push({
+                    title: '📈 智能報表系統',
+                    description: '使用 BI 工具和報表自動化，建立即時dashboard，告別手工製作報表的痛苦。',
+                    benefits: '報表製作時間減少90%',
+                    timeline: '6-10週',
+                    investment: '中-高',
+                    priority: 'high',
+                    priorityText: '高優先'
+                });
+            }
+
+            if (surveyData.painPoints.includes('meetings')) {
+                recommendations.push({
+                    title: '🤝 會議效率優化',
+                    description: '導入AI會議助手，自動記錄、整理會議重點，並追蹤行動項目執行狀況。',
+                    benefits: '會議效率提升60%',
+                    timeline: '2-3週',
+                    investment: '低-中等',
+                    priority: 'medium',
+                    priorityText: '中優先'
+                });
+            }
+
+            // Add more recommendations based on other pain points...
+            if (surveyData.painPoints.includes('approval')) {
+                recommendations.push({
+                    title: '✍️ 數位簽核系統',
+                    description: '建立線上簽核流程，自動路由和提醒，加速審批流程。',
+                    benefits: '簽核速度提升300%',
+                    timeline: '4-6週',
+                    investment: '中等',
+                    priority: 'medium',
+                    priorityText: '中優先'
+                });
+            }
+
+            return recommendations.slice(0, 3); // 最多顯示3個主要建議
+        }
+
+        function generateImmediateActions() {
+            const actions = [];
+
+            if (surveyData.painPoints.includes('timeManagement')) {
+                actions.push('<li>下載一個時間追蹤APP，記錄一週的時間使用狀況</li>');
+            }
+
+            if (surveyData.painPoints.includes('repetitive')) {
+                actions.push('<li>列出每天重複做3次以上的工作項目</li>');
+            }
+
+            if (surveyData.painPoints.includes('dataManagement')) {
+                actions.push('<li>整理桌面和資料夾，建立標準化命名規則</li>');
+            }
+
+            actions.push('<li>與直屬主管討論工作效率改善的可能性</li>');
+            actions.push('<li>調查公司現有的數位工具使用情況</li>');
+
+            return actions.join('');
+        }
+
+        function generateShortTermGoals() {
+            const goals = [];
+
+            if (surveyData.solutionPreference.includes('automation')) {
+                goals.push('<li>學習並實作第一個簡單的自動化流程</li>');
+            }
+
+            if (surveyData.solutionPreference.includes('collaboration')) {
+                goals.push('<li>在團隊中推廣統一的協作工具使用</li>');
+            }
+
+            goals.push('<li>完成痛點分析，制定具體的改善計畫</li>');
+            goals.push('<li>選定1-2個優先改善的工作流程</li>');
+            goals.push('<li>建立效率提升的衡量指標</li>');
+
+            return goals.join('');
+        }
+
+        function generateLongTermGoals() {
+            const goals = [];
+
+            if (surveyData.impactLevel >= 7) {
+                goals.push('<li>建立完整的數位化工作環境</li>');
+            }
+
+            if (surveyData.timeWasted === '6hours+') {
+                goals.push('<li>將低效率工作時間減少到每天2小時以內</li>');
+            }
+
+            goals.push('<li>成為團隊中的效率改善推手</li>');
+            goals.push('<li>掌握AI和自動化工具的進階應用</li>');
+            goals.push('<li>建立個人知識管理和持續學習系統</li>');
+
+            return goals.join('');
+        }
+
+        function generateLearningRecommendations() {
+            const skills = [];
+
+            if (surveyData.solutionPreference.includes('automation')) {
+                skills.push('No Code 自動化工具');
+            }
+
+            if (surveyData.solutionPreference.includes('aiAssistant')) {
+                skills.push('生成式 AI 應用');
+            }
+
+            if (surveyData.solutionPreference.includes('dataAnalysis')) {
+                skills.push('數據分析與視覺化');
+            }
+
+            if (surveyData.solutionPreference.includes('projectTool')) {
+                skills.push('專案管理方法論');
+            }
+
+            if (surveyData.solutionPreference.includes('collaboration')) {
+                skills.push('數位協作工具');
+            }
+
+            // 根據職業推薦相關技能
+            if (surveyData.jobType === 'admin') {
+                skills.push('文件自動化處理');
+            } else if (surveyData.jobType === 'sales') {
+                skills.push('CRM系統優化');
+            } else if (surveyData.jobType === 'marketing') {
+                skills.push('行銷自動化工具');
+            }
+
+            return [...new Set(skills)]; // 去重複
+        }
+
+        // 初始化進度
+        updateProgress();
+    </script>
+</body>
+</html>

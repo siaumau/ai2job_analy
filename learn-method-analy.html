@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>學習風格分類測試</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        .question {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .question h3 {
+            color: #333;
+            margin-top: 0;
+        }
+        .options {
+            display: grid;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .option {
+            padding: 12px;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        .option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+        .submit-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: transform 0.3s ease;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+        .result {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .exploratory {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            border: 2px solid #ff6b9d;
+        }
+        .operational {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border: 2px solid #4ecdc4;
+        }
+        .progress {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 學習風格分類測試</h1>
+            <p>透過10個生活化問題，了解您的學習偏好</p>
+            <div class="progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+
+        <div id="questionnaire">
+            <div class="question">
+                <h3>📱 Q1. 當您拿到一個新的智慧型手機時，您通常會：</h3>
+                <div class="options">
+                    <div class="option" data-type="A" onclick="selectOption(this, 1)">
+                        先研究為什麼這個功能會這樣設計，思考它解決了什麼問題
+                    </div>
+                    <div class="option" data-type="B" onclick="selectOption(this, 1)">
+                        直接按照說明書的步驟，一步步學會基本操作
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>🍳 Q2. 學習新的料理時，您偏好：</h3>
+                <div class="options">
+                    <div class="option" data-type="A" onclick="selectOption(this, 2)">
+                        了解食材搭配的原理，嘗試創新變化
+                    </div>
+                    <div class="option" data-type="B" onclick="selectOption(this, 2)">
+                        按照食譜精確執行，確保成功率
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>🚗 Q3. 在陌生城市開車時，您會：</h3>
+                <div class="options">
+                    <div class="option" data-type="A" onclick="selectOption(this, 3)">
+                        先了解整個城市的道路規劃邏輯，培養方向感
+                    </div>
+                    <div class="option" data-type="B" onclick="selectOption(this, 3)">
+                        完全依賴GPS導航，按指示轉彎即可
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>💰 Q4. 面對投資理財時，您的態度是：</h3>
+                <div class="options">
+                    <div class="option" data-type="A" onclick="selectOption(this, 4)">
+                        深入研究市場趨勢和投資邏輯，做出判斷
+                    </div>
+                    <div class="option" data-type="B" onclick="selectOption(this, 4)">
+                        選擇專家推薦的穩健商品，按建議執行
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>🎮 Q5. 玩新遊戲時，您通常：</h3>
+                <div class="options">
+                    <div class="option" data-type="A" onclick="selectOption(this, 5)">
+                        喜歡探索遊戲機制，找出隱藏的策略和玩法
+                    </div>
+                    <div class="option" data-type="B" onclick="selectOption(this, 5)">
+                        按照新手教學完成，跟著任務指引進行
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>🛠️ Q6. 組裝IKEA家具時，您會：</h3>
+                <div class="options">
+                    <div class="option" data-type="A" onclick="selectOption(this, 6)">
+                        先理解整體結構，思考組裝邏輯
+                    </div>
+                    <div class="option" data-type="B" onclick="selectOption(this, 6)">
+                        嚴格按照圖解說明，逐步執行
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>📚 Q7. 學習新軟體時，您偏好：</h3>
+                <div class="options">
+                    <div class="option" data-type="A" onclick="selectOption(this, 7)">
+                        了解軟體設計理念，探索各種可能的用法
+                    </div>
+                    <div class="option" data-type="B" onclick="selectOption(this, 7)">
+                        學會幾個常用功能就足夠，按需求使用
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>🏃‍♂️ Q8. 開始運動健身計畫時，您會：</h3>
+                <div class="options">
+                    <div class="option" data-type="A" onclick="selectOption(this, 8)">
+                        研究運動科學原理，設計適合自己的計畫
+                    </div>
+                    <div class="option" data-type="B" onclick="selectOption(this, 8)">
+                        選擇成熟的健身課程，跟著教練指導
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>🎨 Q9. 面對創意工作時，您傾向：</h3>
+                <div class="options">
+                    <div class="option" data-type="A" onclick="selectOption(this, 9)">
+                        從零開始構思，享受創造的過程
+                    </div>
+                    <div class="option" data-type="B" onclick="selectOption(this, 9)">
+                        參考現有範本，進行改良和優化
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>🎯 Q10. 解決工作難題時，您習慣：</h3>
+                <div class="options">
+                    <div class="option" data-type="A" onclick="selectOption(this, 10)">
+                        分析問題本質，找出根本解決方案
+                    </div>
+                    <div class="option" data-type="B" onclick="selectOption(this, 10)">
+                        找到有效的標準流程，快速執行
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="submit-btn" onclick="calculateResult()" id="submitBtn">📊 查看我的學習風格</button>
+
+        <div id="result" class="result">
+            <h2 id="resultTitle"></h2>
+            <p id="resultDescription"></p>
+            <div id="resultContent"></div>
+        </div>
+    </div>
+
+    <script>
+        let answers = {};
+        let currentAnswers = 0;
+
+        function selectOption(element, questionNum) {
+            // 移除同問題的其他選項
+            const question = element.parentElement;
+            const options = question.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+
+            // 選擇當前選項
+            element.classList.add('selected');
+
+            // 記錄答案
+            answers[questionNum] = element.getAttribute('data-type');
+
+            // 更新進度
+            currentAnswers = Object.keys(answers).length;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progressBar = document.getElementById('progressBar');
+            const progress = (currentAnswers / 10) * 100;
+            progressBar.style.width = progress + '%';
+        }
+
+        function calculateResult() {
+            if (Object.keys(answers).length < 10) {
+                alert('請完成所有問題再查看結果！');
+                return;
+            }
+
+            let typeA = 0, typeB = 0;
+
+            Object.values(answers).forEach(answer => {
+                if (answer === 'A') typeA++;
+                else typeB++;
+            });
+
+            const resultDiv = document.getElementById('result');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultDescription = document.getElementById('resultDescription');
+            const resultContent = document.getElementById('resultContent');
+
+            // 確保結果區域顯示
+            resultDiv.style.display = 'block';
+
+            if (typeA >= typeB) {
+                // 探索啟發型
+                resultDiv.className = 'result exploratory';
+                resultTitle.textContent = '🚀 探索啟發型學習者';
+                resultDescription.innerHTML = `
+                    <strong>恭喜！您是探索啟發型學習者 (得分：A型${typeA}題，B型${typeB}題)</strong><br>
+                    您喜歡深入思考、探索原理，享受發現和創造的過程
+                `;
+                resultContent.innerHTML = `
+                    <h3>🎯 您的學習特徵：</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>喜歡了解「為什麼」而不只是「怎麼做」</li>
+                        <li>傾向於探索和實驗不同的方法</li>
+                        <li>享受解決複雜問題的挑戰</li>
+                        <li>希望理解背後的邏輯和原理</li>
+                        <li>偏好互動討論和案例分析</li>
+                    </ul>
+                    <p><strong>💡 建議的教學方式：</strong></p>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>🤔 蘇格拉底式問答引導思考</li>
+                        <li>📚 真實案例分析和討論</li>
+                        <li>🔬 實驗探索和創新挑戰</li>
+                        <li>🎭 角色扮演和情境模擬</li>
+                    </ul>
+                `;
+            } else {
+                // 操作執行型
+                resultDiv.className = 'result operational';
+                resultTitle.textContent = '⚡ 操作執行型學習者';
+                resultDescription.innerHTML = `
+                    <strong>恭喜！您是操作執行型學習者 (得分：A型${typeA}題，B型${typeB}題)</strong><br>
+                    您重視效率和實用性，喜歡明確的指導和步驟
+                `;
+                resultContent.innerHTML = `
+                    <h3>🎯 您的學習特徵：</h3>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>偏好清楚的步驟和操作指南</li>
+                        <li>注重實用性和立即可應用的技能</li>
+                        <li>喜歡有結構的學習環境</li>
+                        <li>希望快速掌握有效的方法</li>
+                        <li>重視實作練習和即時反饋</li>
+                    </ul>
+                    <p><strong>💡 建議的教學方式：</strong></p>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>👀 示範操作和分步教學</li>
+                        <li>📋 標準化流程和檢核清單</li>
+                        <li>🛠️ 實作練習和重複訓練</li>
+                        <li>📺 影片教學和操作手冊</li>
+                    </ul>
+                `;
+            }
+
+            // 滾動到結果區域
+            setTimeout(() => {
+                resultDiv.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+    </script>
+</body>
+</html>
