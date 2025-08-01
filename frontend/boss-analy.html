@@ -3,516 +3,462 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>企業導入前評估檢核系統</title>
-    <style>
-        body {
-            font-family: 'Microsoft JhengHei', Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
-            min-height: 100vh;
+    <title>企業導入前評估檢核系統 - AI2Job 職場分析系統</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#667eea',
+                        secondary: '#764ba2',
+                        accent: '#74b9ff',
+                        success: '#00b894',
+                        warning: '#fdcb6e',
+                        danger: '#e17055'
+                    }
+                }
+            }
         }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #2d3436;
-        }
-        .assessment-section {
-            background: #f8f9fa;
-            margin: 20px 0;
-            padding: 25px;
-            border-radius: 12px;
-            border-left: 5px solid #74b9ff;
-        }
-        .section-title {
-            color: #2d3436;
-            font-size: 1.4em;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .checklist-item {
-            background: white;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 8px;
-            border: 2px solid #e9ecef;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .checklist-item:hover {
-            border-color: #74b9ff;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(116, 185, 255, 0.2);
-        }
-        .checklist-item.checked {
-            border-color: #00b894;
-            background: #e8f5e8;
-        }
-        .checklist-item.warning {
-            border-color: #fdcb6e;
-            background: #fff8e1;
-        }
-        .checklist-item.critical {
-            border-color: #e17055;
-            background: #ffebee;
-        }
-        .item-content {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-        }
-        .checkbox {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #74b9ff;
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: white;
-            transition: all 0.3s ease;
-        }
-        .checkbox.checked {
-            background: #00b894;
-            border-color: #00b894;
-            color: white;
-        }
-        .item-text {
-            flex: 1;
-        }
-        .item-description {
-            font-size: 0.9em;
-            color: #636e72;
-            margin-top: 5px;
-        }
-        .priority-badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            font-weight: bold;
-            margin-left: 10px;
-        }
-        .priority-high {
-            background: #ff7675;
-            color: white;
-        }
-        .priority-medium {
-            background: #fdcb6e;
-            color: #2d3436;
-        }
-        .priority-low {
-            background: #74b9ff;
-            color: white;
-        }
-        .progress-section {
-            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
-            padding: 20px;
-            border-radius: 12px;
-            margin: 30px 0;
-            text-align: center;
-        }
-        .progress-bar {
-            width: 100%;
-            height: 12px;
-            background: #e9ecef;
-            border-radius: 6px;
-            overflow: hidden;
-            margin: 15px 0;
-        }
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(45deg, #00b894, #55a3ff);
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-        .readiness-score {
-            font-size: 2em;
-            font-weight: bold;
-            color: #2d3436;
-            margin: 10px 0;
-        }
-        .recommendation {
-            background: #e8f4f8;
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 4px solid #74b9ff;
-            margin: 20px 0;
-            display: none;
-        }
-        .recommendation.show {
-            display: block;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin: 30px 0;
-        }
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 25px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .btn-primary {
-            background: linear-gradient(45deg, #74b9ff, #0984e3);
-            color: white;
-        }
-        .btn-secondary {
-            background: #ddd;
-            color: #2d3436;
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        .expectation-matrix {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-        .expectation-card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            border: 2px solid #e9ecef;
-            text-align: center;
-        }
-        .expectation-card h4 {
-            color: #74b9ff;
-            margin-bottom: 15px;
-        }
-    </style>
+    </script>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>🎯 企業導入前評估檢核系統</h1>
-            <p>No Code / Low Code 與生成式 AI 導入準備度評估</p>
+<body class="min-h-screen bg-gradient-to-br from-accent to-blue-600 p-5">
+    <!-- 認證狀態顯示 -->
+    <div class="max-w-6xl mx-auto mb-4">
+        <div class="flex justify-end items-center space-x-4">
+            <div class="user-info hidden">
+                <!-- 使用者資訊將由JavaScript動態填入 -->
+            </div>
+            <button class="login-btn bg-white text-primary px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                LINE 登入
+            </button>
+            <button class="logout-btn hidden bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">
+                登出
+            </button>
+        </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
+        <!-- 標題區域 -->
+        <div class="bg-gradient-to-r from-accent to-blue-600 text-white p-8 text-center">
+            <h1 class="text-4xl font-bold mb-3">🎯 企業導入前評估檢核系統</h1>
+            <p class="text-xl opacity-90">No Code / Low Code 與生成式 AI 導入準備度評估</p>
         </div>
 
-        <div class="progress-section">
-            <h3>📊 整體準備度評估</h3>
-            <div class="progress-bar">
-                <div class="progress-fill" id="overallProgress"></div>
+        <div class="p-8">
+            <!-- 整體準備度評估 -->
+            <div class="bg-gradient-to-r from-green-100 to-blue-100 p-6 rounded-2xl mb-8 text-center border-l-4 border-success">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center justify-center gap-3">
+                    📊 整體準備度評估
+                </h3>
+                <div class="w-full bg-gray-200 rounded-full h-4 mb-4">
+                    <div class="progress-fill bg-gradient-to-r from-success to-accent h-4 rounded-full transition-all duration-500" id="overallProgress" style="width: 0%"></div>
+                </div>
+                <div class="readiness-score text-4xl font-bold text-gray-800 mb-2" id="readinessScore">0%</div>
+                <p class="text-gray-600" id="readinessStatus">請完成下方評估項目</p>
             </div>
-            <div class="readiness-score" id="readinessScore">0%</div>
-            <p id="readinessStatus">請完成下方評估項目</p>
-        </div>
 
-        <!-- 組織準備度評估 -->
-        <div class="assessment-section">
-            <h2 class="section-title">🏢 組織準備度評估</h2>
+            <!-- 組織準備度評估 -->
+            <div class="bg-gray-50 rounded-2xl p-6 mb-6 border-l-4 border-accent">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                    🏢 組織準備度評估
+                </h2>
 
-            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="10">
-                <div class="item-content">
-                    <div class="checkbox"></div>
-                    <div class="item-text">
-                        <strong>高階管理層支持與承諾</strong>
-                        <span class="priority-badge priority-high">高優先</span>
-                        <div class="item-description">CEO/高階主管是否明確支持此項導入計畫，並願意投入必要資源</div>
+                <div class="checklist-item option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 mb-4" 
+                     onclick="toggleCheck(this)" data-weight="10" data-group="organizationReadiness" data-value="managementSupport">
+                    <div class="flex items-start gap-4">
+                        <div class="checkbox w-6 h-6 border-2 border-accent rounded flex items-center justify-center bg-white cursor-pointer transition-all duration-300"></div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-gray-800">高階管理層支持與承諾</strong>
+                                <span class="inline-block px-2 py-1 bg-red-500 text-white text-xs font-bold rounded-full">高優先</span>
+                            </div>
+                            <div class="text-sm text-gray-600">CEO/高階主管是否明確支持此項導入計畫，並願意投入必要資源</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-item option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 mb-4" 
+                     onclick="toggleCheck(this)" data-weight="8" data-group="organizationReadiness" data-value="changeManagement">
+                    <div class="flex items-start gap-4">
+                        <div class="checkbox w-6 h-6 border-2 border-accent rounded flex items-center justify-center bg-white cursor-pointer transition-all duration-300"></div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-gray-800">變革管理文化</strong>
+                                <span class="inline-block px-2 py-1 bg-red-500 text-white text-xs font-bold rounded-full">高優先</span>
+                            </div>
+                            <div class="text-sm text-gray-600">組織是否具備接受新技術和流程改變的文化氛圍</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-item option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 mb-4" 
+                     onclick="toggleCheck(this)" data-weight="7" data-group="organizationReadiness" data-value="collaboration">
+                    <div class="flex items-start gap-4">
+                        <div class="checkbox w-6 h-6 border-2 border-accent rounded flex items-center justify-center bg-white cursor-pointer transition-all duration-300"></div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-gray-800">跨部門協作機制</strong>
+                                <span class="inline-block px-2 py-1 bg-warning text-gray-800 text-xs font-bold rounded-full">中優先</span>
+                            </div>
+                            <div class="text-sm text-gray-600">各部門間是否有良好的溝通協作機制</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-item option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 mb-4" 
+                     onclick="toggleCheck(this)" data-weight="6" data-group="organizationReadiness" data-value="projectTeam">
+                    <div class="flex items-start gap-4">
+                        <div class="checkbox w-6 h-6 border-2 border-accent rounded flex items-center justify-center bg-white cursor-pointer transition-all duration-300"></div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-gray-800">專案團隊組建</strong>
+                                <span class="inline-block px-2 py-1 bg-warning text-gray-800 text-xs font-bold rounded-full">中優先</span>
+                            </div>
+                            <div class="text-sm text-gray-600">是否已指定專責的專案負責人和核心團隊成員</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="8">
-                <div class="item-content">
-                    <div class="checkbox"></div>
-                    <div class="item-text">
-                        <strong>變革管理文化</strong>
-                        <span class="priority-badge priority-high">高優先</span>
-                        <div class="item-description">組織是否具備接受新技術和流程改變的文化氛圍</div>
+            <!-- 技術準備度評估 -->
+            <div class="bg-gray-50 rounded-2xl p-6 mb-6 border-l-4 border-accent">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                    💻 技術準備度評估
+                </h2>
+
+                <div class="checklist-item option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 mb-4" 
+                     onclick="toggleCheck(this)" data-weight="9" data-group="technicalReadiness" data-value="systemInventory">
+                    <div class="flex items-start gap-4">
+                        <div class="checkbox w-6 h-6 border-2 border-accent rounded flex items-center justify-center bg-white cursor-pointer transition-all duration-300"></div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-gray-800">現有系統盤點完成</strong>
+                                <span class="inline-block px-2 py-1 bg-red-500 text-white text-xs font-bold rounded-full">高優先</span>
+                            </div>
+                            <div class="text-sm text-gray-600">已清楚了解現有的IT系統、資料庫和工具現況</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-item option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 mb-4" 
+                     onclick="toggleCheck(this)" data-weight="8" data-group="technicalReadiness" data-value="networkSecurity">
+                    <div class="flex items-start gap-4">
+                        <div class="checkbox w-6 h-6 border-2 border-accent rounded flex items-center justify-center bg-white cursor-pointer transition-all duration-300"></div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-gray-800">網路與資安基礎建設</strong>
+                                <span class="inline-block px-2 py-1 bg-red-500 text-white text-xs font-bold rounded-full">高優先</span>
+                            </div>
+                            <div class="text-sm text-gray-600">網路頻寬足夠，資安政策完備，能支援新工具導入</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-item option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 mb-4" 
+                     onclick="toggleCheck(this)" data-weight="6" data-group="technicalReadiness" data-value="dataIntegration">
+                    <div class="flex items-start gap-4">
+                        <div class="checkbox w-6 h-6 border-2 border-accent rounded flex items-center justify-center bg-white cursor-pointer transition-all duration-300"></div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-gray-800">資料整合能力</strong>
+                                <span class="inline-block px-2 py-1 bg-warning text-gray-800 text-xs font-bold rounded-full">中優先</span>
+                            </div>
+                            <div class="text-sm text-gray-600">現有資料是否整理完善，具備API接口或資料匯出能力</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-item option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 mb-4" 
+                     onclick="toggleCheck(this)" data-weight="5" data-group="technicalReadiness" data-value="backup">
+                    <div class="flex items-start gap-4">
+                        <div class="checkbox w-6 h-6 border-2 border-accent rounded flex items-center justify-center bg-white cursor-pointer transition-all duration-300"></div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-gray-800">備份與復原機制</strong>
+                                <span class="inline-block px-2 py-1 bg-accent text-white text-xs font-bold rounded-full">低優先</span>
+                            </div>
+                            <div class="text-sm text-gray-600">具備完善的資料備份和系統復原程序</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="7">
-                <div class="item-content">
-                    <div class="checkbox"></div>
-                    <div class="item-text">
-                        <strong>跨部門協作機制</strong>
-                        <span class="priority-badge priority-medium">中優先</span>
-                        <div class="item-description">各部門間是否有良好的溝通協作機制</div>
+            <!-- 人力準備度評估 -->
+            <div class="bg-gray-50 rounded-2xl p-6 mb-6 border-l-4 border-accent">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                    👥 人力準備度評估
+                </h2>
+
+                <div class="checklist-item option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 mb-4" 
+                     onclick="toggleCheck(this)" data-weight="8" data-group="humanReadiness" data-value="employeeSurvey">
+                    <div class="flex items-start gap-4">
+                        <div class="checkbox w-6 h-6 border-2 border-accent rounded flex items-center justify-center bg-white cursor-pointer transition-all duration-300"></div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-gray-800">員工技術接受度調查</strong>
+                                <span class="inline-block px-2 py-1 bg-red-500 text-white text-xs font-bold rounded-full">高優先</span>
+                            </div>
+                            <div class="text-sm text-gray-600">已了解員工對新技術的接受程度和學習意願</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-item option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 mb-4" 
+                     onclick="toggleCheck(this)" data-weight="7" data-group="humanReadiness" data-value="coreUsers">
+                    <div class="flex items-start gap-4">
+                        <div class="checkbox w-6 h-6 border-2 border-accent rounded flex items-center justify-center bg-white cursor-pointer transition-all duration-300"></div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-gray-800">核心用戶識別</strong>
+                                <span class="inline-block px-2 py-1 bg-warning text-gray-800 text-xs font-bold rounded-full">中優先</span>
+                            </div>
+                            <div class="text-sm text-gray-600">已識別出願意嘗試新工具的早期採用者和意見領袖</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-item option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 mb-4" 
+                     onclick="toggleCheck(this)" data-weight="6" data-group="humanReadiness" data-value="trainingPlan">
+                    <div class="flex items-start gap-4">
+                        <div class="checkbox w-6 h-6 border-2 border-accent rounded flex items-center justify-center bg-white cursor-pointer transition-all duration-300"></div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-gray-800">培訓資源規劃</strong>
+                                <span class="inline-block px-2 py-1 bg-warning text-gray-800 text-xs font-bold rounded-full">中優先</span>
+                            </div>
+                            <div class="text-sm text-gray-600">已規劃培訓時間、場地和教學資源</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-item option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 mb-4" 
+                     onclick="toggleCheck(this)" data-weight="5" data-group="humanReadiness" data-value="techSupport">
+                    <div class="flex items-start gap-4">
+                        <div class="checkbox w-6 h-6 border-2 border-accent rounded flex items-center justify-center bg-white cursor-pointer transition-all duration-300"></div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-gray-800">技術支援體系</strong>
+                                <span class="inline-block px-2 py-1 bg-accent text-white text-xs font-bold rounded-full">低優先</span>
+                            </div>
+                            <div class="text-sm text-gray-600">建立內部技術支援和問題解決機制</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="6">
-                <div class="item-content">
-                    <div class="checkbox"></div>
-                    <div class="item-text">
-                        <strong>專案團隊組建</strong>
-                        <span class="priority-badge priority-medium">中優先</span>
-                        <div class="item-description">是否已指定專責的專案負責人和核心團隊成員</div>
+            <!-- 業務準備度評估 -->
+            <div class="bg-gray-50 rounded-2xl p-6 mb-6 border-l-4 border-accent">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                    📈 業務準備度評估
+                </h2>
+
+                <div class="checklist-item option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 mb-4" 
+                     onclick="toggleCheck(this)" data-weight="9" data-group="businessReadiness" data-value="processMapping">
+                    <div class="flex items-start gap-4">
+                        <div class="checkbox w-6 h-6 border-2 border-accent rounded flex items-center justify-center bg-white cursor-pointer transition-all duration-300"></div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-gray-800">業務流程梳理完成</strong>
+                                <span class="inline-block px-2 py-1 bg-red-500 text-white text-xs font-bold rounded-full">高優先</span>
+                            </div>
+                            <div class="text-sm text-gray-600">已詳細梳理現有業務流程，識別改善機會點</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- 技術準備度評估 -->
-        <div class="assessment-section">
-            <h2 class="section-title">💻 技術準備度評估</h2>
-
-            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="9">
-                <div class="item-content">
-                    <div class="checkbox"></div>
-                    <div class="item-text">
-                        <strong>現有系統盤點完成</strong>
-                        <span class="priority-badge priority-high">高優先</span>
-                        <div class="item-description">已清楚了解現有的IT系統、資料庫和工具現況</div>
+                <div class="checklist-item option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 mb-4" 
+                     onclick="toggleCheck(this)" data-weight="8" data-group="businessReadiness" data-value="painPoints">
+                    <div class="flex items-start gap-4">
+                        <div class="checkbox w-6 h-6 border-2 border-accent rounded flex items-center justify-center bg-white cursor-pointer transition-all duration-300"></div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-gray-800">痛點問題明確化</strong>
+                                <span class="inline-block px-2 py-1 bg-red-500 text-white text-xs font-bold rounded-full">高優先</span>
+                            </div>
+                            <div class="text-sm text-gray-600">清楚定義希望透過新工具解決的具體問題</div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="8">
-                <div class="item-content">
-                    <div class="checkbox"></div>
-                    <div class="item-text">
-                        <strong>網路與資安基礎建設</strong>
-                        <span class="priority-badge priority-high">高優先</span>
-                        <div class="item-description">網路頻寬足夠，資安政策完備，能支援新工具導入</div>
+                <div class="checklist-item option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 mb-4" 
+                     onclick="toggleCheck(this)" data-weight="7" data-group="businessReadiness" data-value="pilotScenario">
+                    <div class="flex items-start gap-4">
+                        <div class="checkbox w-6 h-6 border-2 border-accent rounded flex items-center justify-center bg-white cursor-pointer transition-all duration-300"></div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-gray-800">試點場景選擇</strong>
+                                <span class="inline-block px-2 py-1 bg-warning text-gray-800 text-xs font-bold rounded-full">中優先</span>
+                            </div>
+                            <div class="text-sm text-gray-600">已選定適合的試點部門和應用場景</div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="6">
-                <div class="item-content">
-                    <div class="checkbox"></div>
-                    <div class="item-text">
-                        <strong>資料整合能力</strong>
-                        <span class="priority-badge priority-medium">中優先</span>
-                        <div class="item-description">現有資料是否整理完善，具備API接口或資料匯出能力</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="5">
-                <div class="item-content">
-                    <div class="checkbox"></div>
-                    <div class="item-text">
-                        <strong>備份與復原機制</strong>
-                        <span class="priority-badge priority-low">低優先</span>
-                        <div class="item-description">具備完善的資料備份和系統復原程序</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 人力準備度評估 -->
-        <div class="assessment-section">
-            <h2 class="section-title">👥 人力準備度評估</h2>
-
-            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="8">
-                <div class="item-content">
-                    <div class="checkbox"></div>
-                    <div class="item-text">
-                        <strong>員工技術接受度調查</strong>
-                        <span class="priority-badge priority-high">高優先</span>
-                        <div class="item-description">已了解員工對新技術的接受程度和學習意願</div>
+                <div class="checklist-item option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 mb-4" 
+                     onclick="toggleCheck(this)" data-weight="6" data-group="businessReadiness" data-value="kpis">
+                    <div class="flex items-start gap-4">
+                        <div class="checkbox w-6 h-6 border-2 border-accent rounded flex items-center justify-center bg-white cursor-pointer transition-all duration-300"></div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-gray-800">成效衡量指標</strong>
+                                <span class="inline-block px-2 py-1 bg-warning text-gray-800 text-xs font-bold rounded-full">中優先</span>
+                            </div>
+                            <div class="text-sm text-gray-600">設定明確的成功指標和衡量方式</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="7">
-                <div class="item-content">
-                    <div class="checkbox"></div>
-                    <div class="item-text">
-                        <strong>核心用戶識別</strong>
-                        <span class="priority-badge priority-medium">中優先</span>
-                        <div class="item-description">已識別出願意嘗試新工具的早期採用者和意見領袖</div>
+            <!-- 財務準備度評估 -->
+            <div class="bg-gray-50 rounded-2xl p-6 mb-6 border-l-4 border-accent">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                    💰 財務準備度評估
+                </h2>
+
+                <div class="checklist-item option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 mb-4" 
+                     onclick="toggleCheck(this)" data-weight="8" data-group="financialReadiness" data-value="budgetPlanning">
+                    <div class="flex items-start gap-4">
+                        <div class="checkbox w-6 h-6 border-2 border-accent rounded flex items-center justify-center bg-white cursor-pointer transition-all duration-300"></div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-gray-800">預算規劃完整</strong>
+                                <span class="inline-block px-2 py-1 bg-red-500 text-white text-xs font-bold rounded-full">高優先</span>
+                            </div>
+                            <div class="text-sm text-gray-600">已編列軟體授權、培訓、維護等完整預算</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-item option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 mb-4" 
+                     onclick="toggleCheck(this)" data-weight="7" data-group="financialReadiness" data-value="roiExpectation">
+                    <div class="flex items-start gap-4">
+                        <div class="checkbox w-6 h-6 border-2 border-accent rounded flex items-center justify-center bg-white cursor-pointer transition-all duration-300"></div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-gray-800">ROI期望設定</strong>
+                                <span class="inline-block px-2 py-1 bg-warning text-gray-800 text-xs font-bold rounded-full">中優先</span>
+                            </div>
+                            <div class="text-sm text-gray-600">設定合理的投資報酬率期望和回收期限</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-item option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 mb-4" 
+                     onclick="toggleCheck(this)" data-weight="5" data-group="financialReadiness" data-value="costControl">
+                    <div class="flex items-start gap-4">
+                        <div class="checkbox w-6 h-6 border-2 border-accent rounded flex items-center justify-center bg-white cursor-pointer transition-all duration-300"></div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <strong class="text-gray-800">費用控制機制</strong>
+                                <span class="inline-block px-2 py-1 bg-accent text-white text-xs font-bold rounded-full">低優先</span>
+                            </div>
+                            <div class="text-sm text-gray-600">建立費用監控和控制機制，避免預算超支</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="6">
-                <div class="item-content">
-                    <div class="checkbox"></div>
-                    <div class="item-text">
-                        <strong>培訓資源規劃</strong>
-                        <span class="priority-badge priority-medium">中優先</span>
-                        <div class="item-description">已規劃培訓時間、場地和教學資源</div>
-                    </div>
-                </div>
+            <!-- 提交按鈕 -->
+            <div class="flex gap-4 justify-center mb-8">
+                <button class="submit-btn bg-gradient-to-r from-accent to-blue-600 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                    📊 生成評估報告
+                </button>
+                <button class="reset-btn bg-gray-500 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:shadow-xl transform hover:scale-105 transition-all duration-300" onclick="resetAssessment()">
+                    🔄 重新評估
+                </button>
             </div>
 
-            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="5">
-                <div class="item-content">
-                    <div class="checkbox"></div>
-                    <div class="item-text">
-                        <strong>技術支援體系</strong>
-                        <span class="priority-badge priority-low">低優先</span>
-                        <div class="item-description">建立內部技術支援和問題解決機制</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 業務準備度評估 -->
-        <div class="assessment-section">
-            <h2 class="section-title">📈 業務準備度評估</h2>
-
-            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="9">
-                <div class="item-content">
-                    <div class="checkbox"></div>
-                    <div class="item-text">
-                        <strong>業務流程梳理完成</strong>
-                        <span class="priority-badge priority-high">高優先</span>
-                        <div class="item-description">已詳細梳理現有業務流程，識別改善機會點</div>
-                    </div>
-                </div>
+            <!-- 建議區域 -->
+            <div id="recommendationHigh" class="recommendation hidden bg-green-50 p-6 rounded-2xl border-l-4 border-success mb-6">
+                <h3 class="text-2xl font-bold text-green-800 mb-4">🚀 準備度良好 (80%以上)</h3>
+                <p class="text-green-700 mb-4"><strong>恭喜！</strong>您的組織已具備導入的良好條件，建議：</p>
+                <ul class="text-green-700 space-y-2">
+                    <li>• 立即啟動試點專案，選擇1-2個部門進行POC</li>
+                    <li>• 建立完整的專案管理機制和里程碑追蹤</li>
+                    <li>• 準備全面推廣的策略和資源</li>
+                </ul>
             </div>
 
-            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="8">
-                <div class="item-content">
-                    <div class="checkbox"></div>
-                    <div class="item-text">
-                        <strong>痛點問題明確化</strong>
-                        <span class="priority-badge priority-high">高優先</span>
-                        <div class="item-description">清楚定義希望透過新工具解決的具體問題</div>
-                    </div>
-                </div>
+            <div id="recommendationMedium" class="recommendation hidden bg-yellow-50 p-6 rounded-2xl border-l-4 border-warning mb-6">
+                <h3 class="text-2xl font-bold text-yellow-800 mb-4">⚠️ 準備度中等 (50-79%)</h3>
+                <p class="text-yellow-700 mb-4"><strong>建議先完善準備工作</strong>，重點改善：</p>
+                <ul class="text-yellow-700 space-y-2">
+                    <li>• 加強未完成項目的準備工作</li>
+                    <li>• 從小規模試點開始，累積經驗</li>
+                    <li>• 重點培養核心團隊的能力</li>
+                </ul>
             </div>
 
-            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="7">
-                <div class="item-content">
-                    <div class="checkbox"></div>
-                    <div class="item-text">
-                        <strong>試點場景選擇</strong>
-                        <span class="priority-badge priority-medium">中優先</span>
-                        <div class="item-description">已選定適合的試點部門和應用場景</div>
-                    </div>
-                </div>
+            <div id="recommendationLow" class="recommendation hidden bg-red-50 p-6 rounded-2xl border-l-4 border-danger mb-6">
+                <h3 class="text-2xl font-bold text-red-800 mb-4">🛑 準備度不足 (50%以下)</h3>
+                <p class="text-red-700 mb-4"><strong>建議暫緩導入</strong>，優先處理：</p>
+                <ul class="text-red-700 space-y-2">
+                    <li>• 獲得高階管理層的明確支持</li>
+                    <li>• 完成基礎建設和人員培訓</li>
+                    <li>• 建立變革管理機制</li>
+                </ul>
             </div>
 
-            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="6">
-                <div class="item-content">
-                    <div class="checkbox"></div>
-                    <div class="item-text">
-                        <strong>成效衡量指標</strong>
-                        <span class="priority-badge priority-medium">中優先</span>
-                        <div class="item-description">設定明確的成功指標和衡量方式</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 財務準備度評估 -->
-        <div class="assessment-section">
-            <h2 class="section-title">💰 財務準備度評估</h2>
-
-            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="8">
-                <div class="item-content">
-                    <div class="checkbox"></div>
-                    <div class="item-text">
-                        <strong>預算規劃完整</strong>
-                        <span class="priority-badge priority-high">高優先</span>
-                        <div class="item-description">已編列軟體授權、培訓、維護等完整預算</div>
-                    </div>
-                </div>
+            <!-- 結果區域 -->
+            <div id="resultSection" class="result-section hidden mt-8">
+                <!-- 結果內容將由JavaScript動態生成 -->
             </div>
 
-            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="7">
-                <div class="item-content">
-                    <div class="checkbox"></div>
-                    <div class="item-text">
-                        <strong>ROI期望設定</strong>
-                        <span class="priority-badge priority-medium">中優先</span>
-                        <div class="item-description">設定合理的投資報酬率期望和回收期限</div>
+            <!-- 期待管理矩陣 -->
+            <div class="bg-gray-50 rounded-2xl p-6 border-l-4 border-accent">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                    🎯 合理期待設定
+                </h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-xl border-2 border-gray-200 text-center">
+                        <h4 class="text-lg font-bold text-accent mb-4">短期效益 (1-3個月)</h4>
+                        <div class="text-gray-700">
+                            <p>✅ 流程自動化</p>
+                            <p>✅ 重複工作減少</p>
+                            <p>✅ 團隊學習成長</p>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="5">
-                <div class="item-content">
-                    <div class="checkbox"></div>
-                    <div class="item-text">
-                        <strong>費用控制機制</strong>
-                        <span class="priority-badge priority-low">低優先</span>
-                        <div class="item-description">建立費用監控和控制機制，避免預算超支</div>
+                    <div class="bg-white p-6 rounded-xl border-2 border-gray-200 text-center">
+                        <h4 class="text-lg font-bold text-accent mb-4">中期效益 (3-12個月)</h4>
+                        <div class="text-gray-700">
+                            <p>📈 效率提升20-40%</p>
+                            <p>📊 決策速度加快</p>
+                            <p>🔄 流程標準化</p>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="action-buttons">
-            <button class="btn btn-primary" onclick="generateReport()">📊 生成評估報告</button>
-            <button class="btn btn-secondary" onclick="resetAssessment()">🔄 重新評估</button>
-        </div>
-
-        <!-- 建議區域 -->
-        <div id="recommendationHigh" class="recommendation">
-            <h3>🚀 準備度良好 (80%以上)</h3>
-            <p><strong>恭喜！</strong>您的組織已具備導入的良好條件，建議：</p>
-            <ul>
-                <li>立即啟動試點專案，選擇1-2個部門進行POC</li>
-                <li>建立完整的專案管理機制和里程碑追蹤</li>
-                <li>準備全面推廣的策略和資源</li>
-            </ul>
-        </div>
-
-        <div id="recommendationMedium" class="recommendation">
-            <h3>⚠️ 準備度中等 (50-79%)</h3>
-            <p><strong>建議先完善準備工作</strong>，重點改善：</p>
-            <ul>
-                <li>加強未完成項目的準備工作</li>
-                <li>從小規模試點開始，累積經驗</li>
-                <li>重點培養核心團隊的能力</li>
-            </ul>
-        </div>
-
-        <div id="recommendationLow" class="recommendation">
-            <h3>🛑 準備度不足 (50%以下)</h3>
-            <p><strong>建議暫緩導入</strong>，優先處理：</p>
-            <ul>
-                <li>獲得高階管理層的明確支持</li>
-                <li>完成基礎建設和人員培訓</li>
-                <li>建立變革管理機制</li>
-            </ul>
-        </div>
-
-        <!-- 期待管理矩陣 -->
-        <div class="assessment-section">
-            <h2 class="section-title">🎯 合理期待設定</h2>
-            <div class="expectation-matrix">
-                <div class="expectation-card">
-                    <h4>短期效益 (1-3個月)</h4>
-                    <p>✅ 流程自動化<br>✅ 重複工作減少<br>✅ 團隊學習成長</p>
-                </div>
-                <div class="expectation-card">
-                    <h4>中期效益 (3-12個月)</h4>
-                    <p>📈 效率提升20-40%<br>📊 決策速度加快<br>🔄 流程標準化</p>
-                </div>
-                <div class="expectation-card">
-                    <h4>長期效益 (1年以上)</h4>
-                    <p>🚀 創新能力提升<br>💰 成本大幅降低<br>🎯 競爭優勢確立</p>
+                    <div class="bg-white p-6 rounded-xl border-2 border-gray-200 text-center">
+                        <h4 class="text-lg font-bold text-accent mb-4">長期效益 (1年以上)</h4>
+                        <div class="text-gray-700">
+                            <p>🚀 創新能力提升</p>
+                            <p>💰 成本大幅降低</p>
+                            <p>🎯 競爭優勢確立</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- 加載JavaScript -->
+    <script src="assets/js/common.js"></script>
+    <script src="assets/js/survey.js"></script>
+    <script src="assets/js/api.js"></script>
+    
     <script>
         let totalWeight = 0;
         let checkedWeight = 0;
 
         // 計算總權重
-        document.querySelectorAll('.checklist-item').forEach(item => {
-            totalWeight += parseInt(item.dataset.weight);
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化問卷管理器
+            SurveyManager.init('enterprise_readiness');
+            
+            // 計算總權重
+            document.querySelectorAll('.checklist-item').forEach(item => {
+                totalWeight += parseInt(item.dataset.weight);
+            });
         });
 
         function toggleCheck(element) {
@@ -521,14 +467,40 @@
 
             if (element.classList.contains('checked')) {
                 element.classList.remove('checked');
-                checkbox.classList.remove('checked');
+                element.classList.remove('border-success', 'bg-green-50');
+                element.classList.add('border-gray-200');
+                checkbox.classList.remove('checked', 'bg-success', 'border-success', 'text-white');
+                checkbox.classList.add('border-accent');
                 checkbox.innerHTML = '';
                 checkedWeight -= weight;
+                
+                // 更新問卷資料
+                const group = element.dataset.group;
+                const value = element.dataset.value;
+                if (SurveyManager.surveyData[group]) {
+                    const index = SurveyManager.surveyData[group].indexOf(value);
+                    if (index > -1) {
+                        SurveyManager.surveyData[group].splice(index, 1);
+                    }
+                }
             } else {
                 element.classList.add('checked');
-                checkbox.classList.add('checked');
+                element.classList.remove('border-gray-200');
+                element.classList.add('border-success', 'bg-green-50');
+                checkbox.classList.add('checked', 'bg-success', 'border-success', 'text-white');
+                checkbox.classList.remove('border-accent');
                 checkbox.innerHTML = '✓';
                 checkedWeight += weight;
+                
+                // 更新問卷資料
+                const group = element.dataset.group;
+                const value = element.dataset.value;
+                if (!SurveyManager.surveyData[group]) {
+                    SurveyManager.surveyData[group] = [];
+                }
+                if (!SurveyManager.surveyData[group].includes(value)) {
+                    SurveyManager.surveyData[group].push(value);
+                }
             }
 
             updateProgress();
@@ -556,46 +528,75 @@
             const statusElement = document.getElementById('readinessStatus');
             statusElement.textContent = status;
             statusElement.style.color = statusColor;
+            
+            // 更新進度到問卷系統
+            SurveyManager.updateProgress();
         }
 
-        function generateReport() {
+        // 修改提交按鈕事件
+        document.querySelector('.submit-btn').addEventListener('click', function() {
             const percentage = Math.round((checkedWeight / totalWeight) * 100);
+            
+            // 儲存問卷資料
+            SurveyManager.surveyData.readinessScore = percentage;
+            SurveyManager.surveyData.checkedWeight = checkedWeight;
+            SurveyManager.surveyData.totalWeight = totalWeight;
+            
+            // 提交問卷
+            SurveyManager.submitSurvey();
 
             // 隱藏所有建議
             document.querySelectorAll('.recommendation').forEach(rec => {
-                rec.classList.remove('show');
+                rec.classList.add('hidden');
             });
 
             // 顯示對應建議
             if (percentage >= 80) {
-                document.getElementById('recommendationHigh').classList.add('show');
+                document.getElementById('recommendationHigh').classList.remove('hidden');
             } else if (percentage >= 50) {
-                document.getElementById('recommendationMedium').classList.add('show');
+                document.getElementById('recommendationMedium').classList.remove('hidden');
             } else {
-                document.getElementById('recommendationLow').classList.add('show');
+                document.getElementById('recommendationLow').classList.remove('hidden');
             }
 
             // 滾動到建議區域
-            document.querySelector('.recommendation.show').scrollIntoView({
-                behavior: 'smooth'
-            });
-        }
+            setTimeout(() => {
+                document.querySelector('.recommendation:not(.hidden)').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }, 100);
+        });
 
         function resetAssessment() {
             document.querySelectorAll('.checklist-item').forEach(item => {
-                item.classList.remove('checked');
+                item.classList.remove('checked', 'border-success', 'bg-green-50');
+                item.classList.add('border-gray-200');
                 const checkbox = item.querySelector('.checkbox');
-                checkbox.classList.remove('checked');
+                checkbox.classList.remove('checked', 'bg-success', 'border-success', 'text-white');
+                checkbox.classList.add('border-accent');
                 checkbox.innerHTML = '';
             });
 
             document.querySelectorAll('.recommendation').forEach(rec => {
-                rec.classList.remove('show');
+                rec.classList.add('hidden');
             });
 
             checkedWeight = 0;
             updateProgress();
+            
+            // 重置問卷資料
+            SurveyManager.resetSurvey();
         }
     </script>
+
+    <style>
+        .option.selected {
+            @apply border-success bg-green-50 transform scale-105;
+        }
+        
+        .checkbox.checked {
+            @apply bg-success border-success text-white;
+        }
+    </style>
 </body>
 </html>

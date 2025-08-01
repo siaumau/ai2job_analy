@@ -1,0 +1,5 @@
+我的frontend/index.html
+也希望有像 boss-analy.html中的<button class="login-btn bg-white text-primary px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                LINE 登入
+            </button>
+的按鈕
