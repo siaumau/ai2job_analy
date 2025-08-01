@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上班族工作痛點調查 - 找到您的效率提升方案</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#667eea',
+                        secondary: '#764ba2',
+                        accent: '#ff6b6b',
+                        success: '#4ecdc4',
+                        warning: '#fdcb6e',
+                        danger: '#e17055'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-primary to-secondary p-5">
+    <!-- 認證狀態顯示 -->
+    <div class="max-w-4xl mx-auto mb-4">
+        <div class="flex justify-end items-center space-x-4">
+            <div class="user-info hidden">
+                <!-- 使用者資訊將由JavaScript動態填入 -->
+            </div>
+            <button class="login-btn bg-white text-primary px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
+                LINE 登入
+            </button>
+            <button class="logout-btn hidden bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">
+                登出
+            </button>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
+        <!-- 標題區域 -->
+        <div class="bg-gradient-to-r from-accent to-orange-500 text-white p-8 text-center">
+            <h1 class="text-4xl font-bold mb-3 animate-pulse">💼 工作效率痛點調查</h1>
+            <p class="text-xl opacity-90">3分鐘找到最適合您的效率提升方案</p>
+        </div>
+
+        <div class="p-8">
+            <!-- 進度條 -->
+            <div class="bg-gray-100 p-6 rounded-2xl mb-8 text-center">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">📊 調查進度</h3>
+                <div class="w-full bg-gray-200 rounded-full h-3 mb-4">
+                    <div id="progressFill" class="bg-gradient-to-r from-accent to-orange-500 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <span id="progressText" class="text-gray-600 font-medium">0% 完成</span>
+            </div>
+
+            <!-- 基本資訊 -->
+            <div class="bg-gray-50 rounded-2xl p-6 mb-6 border-l-4 border-accent">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                    👤 基本資訊
+                </h2>
+
+                <div class="mb-6">
+                    <div class="text-lg font-semibold text-gray-700 mb-4">您的工作性質主要是？</div>
+                    <div class="grid md:grid-cols-2 gap-3">
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="jobType" data-value="admin" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">📋</span>
+                                <span class="font-medium">行政文書（處理文件、資料整理、會議安排等）</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="jobType" data-value="sales" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">💼</span>
+                                <span class="font-medium">業務銷售（客戶拜訪、報價、合約處理等）</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="jobType" data-value="marketing" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">📱</span>
+                                <span class="font-medium">行銷企劃（活動策劃、內容創作、數據分析等）</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="jobType" data-value="hr" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">👥</span>
+                                <span class="font-medium">人資管理（招募、培訓、薪資、員工關係等）</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="jobType" data-value="finance" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">💰</span>
+                                <span class="font-medium">財務會計（記帳、報表、預算、分析等）</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="jobType" data-value="it" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">💻</span>
+                                <span class="font-medium">資訊技術（系統維護、程式開發、技術支援等）</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="jobType" data-value="management" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">👔</span>
+                                <span class="font-medium">管理職（團隊管理、決策制定、策略規劃等）</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="jobType" data-value="other" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🔧</span>
+                                <span class="font-medium">其他專業職（設計、工程、法務、採購等）</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="text-lg font-semibold text-gray-700 mb-4">您的公司規模？</div>
+                    <div class="grid md:grid-cols-3 gap-3">
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="companySize" data-value="small" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🏪</span>
+                                <span class="font-medium">小型企業（1-50人）</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="companySize" data-value="medium" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🏢</span>
+                                <span class="font-medium">中型企業（51-500人）</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="companySize" data-value="large" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🏬</span>
+                                <span class="font-medium">大型企業（500人以上）</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 主要痛點識別 -->
+            <div class="bg-gray-50 rounded-2xl p-6 mb-6 border-l-4 border-accent">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
+                    😤 主要工作痛點
+                </h2>
+                <div class="text-sm text-gray-600 mb-4 italic">※ 可以選擇多個選項，請選出所有困擾您的問題</div>
+
+                <div class="mb-6">
+                    <div class="text-lg font-semibold text-gray-700 mb-4">以下哪些問題經常困擾您？</div>
+                    <div class="grid md:grid-cols-2 gap-3">
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="painPoints" data-value="repetitive" data-multiple="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🔄</span>
+                                <span class="font-medium">重複性工作太多，浪費大量時間在複製貼貼、資料輸入</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="painPoints" data-value="communication" data-multiple="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">💬</span>
+                                <span class="font-medium">跨部門溝通困難，訊息傳遞不順暢，常常雞同鴨講</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="painPoints" data-value="dataManagement" data-multiple="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">📊</span>
+                                <span class="font-medium">資料管理混亂，找不到檔案，版本控制困難</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="painPoints" data-value="timeManagement" data-multiple="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">⏰</span>
+                                <span class="font-medium">時間管理困難，工作排程混亂，常常加班趕工</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="painPoints" data-value="meetings" data-multiple="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🤝</span>
+                                <span class="font-medium">會議效率低，開會時間長但決議少，後續追蹤困難</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="painPoints" data-value="reporting" data-multiple="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">📈</span>
+                                <span class="font-medium">報表製作耗時，數據整理複雜，經常出錯</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="painPoints" data-value="approval" data-multiple="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">✍️</span>
+                                <span class="font-medium">簽核流程繁瑣，審批速度慢，影響工作進度</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="painPoints" data-value="customerService" data-multiple="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">📞</span>
+                                <span class="font-medium">客戶服務回應慢，客戶資料分散，服務品質不一致</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="painPoints" data-value="projectManagement" data-multiple="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">📋</span>
+                                <span class="font-medium">專案管理困難，進度追蹤不易，團隊協作效率差</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="painPoints" data-value="learning" data-multiple="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">📚</span>
+                                <span class="font-medium">學習新技能困難，缺乏系統性培訓，跟不上技術發展</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 痛點強度評估 -->
+            <div class="bg-gray-50 rounded-2xl p-6 mb-6 border-l-4 border-accent">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                    📊 痛點影響程度
+                </h2>
+
+                <div class="mb-6">
+                    <div class="text-lg font-semibold text-gray-700 mb-4">這些工作問題對您的影響程度？</div>
+                    <div class="bg-white p-6 rounded-xl">
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="text-gray-600 font-medium min-w-20">輕微影響</span>
+                            <input type="range" min="1" max="10" value="5" 
+                                   class="slider flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                                   id="impactLevel" name="impactLevel">
+                            <span class="text-gray-600 font-medium min-w-20">嚴重影響</span>
+                        </div>
+                        <div class="text-center">
+                            <strong class="text-gray-800">影響程度：<span id="impactValue">5</span>/10</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="text-lg font-semibold text-gray-700 mb-4">您每天花多少時間在這些低效率的工作上？</div>
+                    <div class="grid md:grid-cols-2 gap-3">
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="timeWasted" data-value="1hour" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">⏱️</span>
+                                <span class="font-medium">1小時以內</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="timeWasted" data-value="2-3hours" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">⏰</span>
+                                <span class="font-medium">2-3小時</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="timeWasted" data-value="4-5hours" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🕐</span>
+                                <span class="font-medium">4-5小時</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="timeWasted" data-value="6hours+" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">😵</span>
+                                <span class="font-medium">6小時以上（幾乎整天）</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 解決方案期待 -->
+            <div class="bg-gray-50 rounded-2xl p-6 mb-6 border-l-4 border-accent">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                    🎯 解決方案期待
+                </h2>
+
+                <div class="mb-6">
+                    <div class="text-lg font-semibold text-gray-700 mb-4">您最希望通過什麼方式來提升工作效率？</div>
+                    <div class="text-sm text-gray-600 mb-4 italic">※ 可選擇多個選項</div>
+                    <div class="grid md:grid-cols-2 gap-3">
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="solutionPreference" data-value="automation" data-multiple="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🤖</span>
+                                <span class="font-medium">自動化工具，減少重複性工作</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="solutionPreference" data-value="collaboration" data-multiple="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">👥</span>
+                                <span class="font-medium">協作平台，改善團隊溝通</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="solutionPreference" data-value="dataAnalysis" data-multiple="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">📊</span>
+                                <span class="font-medium">數據分析工具，快速產出報表</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="solutionPreference" data-value="projectTool" data-multiple="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">📋</span>
+                                <span class="font-medium">專案管理工具，提升協作效率</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="solutionPreference" data-value="aiAssistant" data-multiple="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🧠</span>
+                                <span class="font-medium">AI助手，協助決策和內容創作</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="solutionPreference" data-value="training" data-multiple="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🎓</span>
+                                <span class="font-medium">技能培訓，提升個人能力</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="solutionPreference" data-value="process" data-multiple="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">⚙️</span>
+                                <span class="font-medium">流程優化，重新設計工作方式</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="text-lg font-semibold text-gray-700 mb-4">您希望多快看到改善效果？</div>
+                    <div class="grid md:grid-cols-2 gap-3">
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="timeExpectation" data-value="immediate" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">⚡</span>
+                                <span class="font-medium">立即見效（1週內）</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="timeExpectation" data-value="short" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">📅</span>
+                                <span class="font-medium">短期改善（1個月內）</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="timeExpectation" data-value="medium" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🗓️</span>
+                                <span class="font-medium">中期改善（3個月內）</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="timeExpectation" data-value="long" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">📆</span>
+                                <span class="font-medium">長期改善（半年以上）</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="text-lg font-semibold text-gray-700 mb-4">您最關注解決方案的哪個特點？</div>
+                    <div class="grid md:grid-cols-2 gap-3">
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="solutionFocus" data-value="easyUse" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">😊</span>
+                                <span class="font-medium">簡單易用，學習成本低</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="solutionFocus" data-value="powerful" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">💪</span>
+                                <span class="font-medium">功能強大，能解決複雜問題</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="solutionFocus" data-value="costEffective" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">💰</span>
+                                <span class="font-medium">性價比高，投資報酬率佳</span>
+                            </div>
+                        </div>
+                        <div class="option cursor-pointer bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-accent hover:bg-red-50 transition-all duration-300 transform hover:scale-105" 
+                             data-group="solutionFocus" data-value="integration" data-single="true">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🔗</span>
+                                <span class="font-medium">整合性佳，與現有系統搭配</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 提交按鈕 -->
+            <button class="submit-btn w-full bg-gradient-to-r from-accent to-orange-500 text-white py-4 px-8 rounded-2xl text-xl font-bold hover:shadow-xl transform hover:scale-105 transition-all duration-300 animate-pulse">
+                🔍 立即分析我的痛點與解決方案
+            </button>
+
+            <!-- 結果區域 -->
+            <div id="resultSection" class="result-section hidden mt-8">
+                <!-- 結果內容將由JavaScript動態生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 加載JavaScript -->
+    <script src="assets/js/common.js"></script>
+    <script src="assets/js/survey.js"></script>
+    <script src="assets/js/api.js"></script>
+    
+    <script>
+        // 初始化工作痛點調查
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化問卷管理器
+            SurveyManager.init('work_pain');
+            
+            // 更新滑桿顯示值
+            const impactSlider = document.getElementById('impactLevel');
+            if (impactSlider) {
+                impactSlider.addEventListener('input', function() {
+                    document.getElementById('impactValue').textContent = this.value;
+                    SurveyManager.surveyData.impactLevel = parseInt(this.value);
+                });
+            }
+        });
+    </script>
+
+    <style>
+        .option.selected {
+            @apply border-accent bg-accent text-white transform scale-105;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #ff6b6b;
+            cursor: pointer;
+        }
+        
+        .slider::-moz-range-thumb {
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #ff6b6b;
+            cursor: pointer;
+            border: none;
+        }
+    </style>
+</body>
+</html>

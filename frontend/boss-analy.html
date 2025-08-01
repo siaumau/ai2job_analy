@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企業導入前評估檢核系統</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2d3436;
+        }
+        .assessment-section {
+            background: #f8f9fa;
+            margin: 20px 0;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 5px solid #74b9ff;
+        }
+        .section-title {
+            color: #2d3436;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .checklist-item {
+            background: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .checklist-item:hover {
+            border-color: #74b9ff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(116, 185, 255, 0.2);
+        }
+        .checklist-item.checked {
+            border-color: #00b894;
+            background: #e8f5e8;
+        }
+        .checklist-item.warning {
+            border-color: #fdcb6e;
+            background: #fff8e1;
+        }
+        .checklist-item.critical {
+            border-color: #e17055;
+            background: #ffebee;
+        }
+        .item-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #74b9ff;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            transition: all 0.3s ease;
+        }
+        .checkbox.checked {
+            background: #00b894;
+            border-color: #00b894;
+            color: white;
+        }
+        .item-text {
+            flex: 1;
+        }
+        .item-description {
+            font-size: 0.9em;
+            color: #636e72;
+            margin-top: 5px;
+        }
+        .priority-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .priority-high {
+            background: #ff7675;
+            color: white;
+        }
+        .priority-medium {
+            background: #fdcb6e;
+            color: #2d3436;
+        }
+        .priority-low {
+            background: #74b9ff;
+            color: white;
+        }
+        .progress-section {
+            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #00b894, #55a3ff);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        .readiness-score {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2d3436;
+            margin: 10px 0;
+        }
+        .recommendation {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #74b9ff;
+            margin: 20px 0;
+            display: none;
+        }
+        .recommendation.show {
+            display: block;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #74b9ff, #0984e3);
+            color: white;
+        }
+        .btn-secondary {
+            background: #ddd;
+            color: #2d3436;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .expectation-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .expectation-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            text-align: center;
+        }
+        .expectation-card h4 {
+            color: #74b9ff;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 企業導入前評估檢核系統</h1>
+            <p>No Code / Low Code 與生成式 AI 導入準備度評估</p>
+        </div>
+
+        <div class="progress-section">
+            <h3>📊 整體準備度評估</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="overallProgress"></div>
+            </div>
+            <div class="readiness-score" id="readinessScore">0%</div>
+            <p id="readinessStatus">請完成下方評估項目</p>
+        </div>
+
+        <!-- 組織準備度評估 -->
+        <div class="assessment-section">
+            <h2 class="section-title">🏢 組織準備度評估</h2>
+
+            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="10">
+                <div class="item-content">
+                    <div class="checkbox"></div>
+                    <div class="item-text">
+                        <strong>高階管理層支持與承諾</strong>
+                        <span class="priority-badge priority-high">高優先</span>
+                        <div class="item-description">CEO/高階主管是否明確支持此項導入計畫，並願意投入必要資源</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="8">
+                <div class="item-content">
+                    <div class="checkbox"></div>
+                    <div class="item-text">
+                        <strong>變革管理文化</strong>
+                        <span class="priority-badge priority-high">高優先</span>
+                        <div class="item-description">組織是否具備接受新技術和流程改變的文化氛圍</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="7">
+                <div class="item-content">
+                    <div class="checkbox"></div>
+                    <div class="item-text">
+                        <strong>跨部門協作機制</strong>
+                        <span class="priority-badge priority-medium">中優先</span>
+                        <div class="item-description">各部門間是否有良好的溝通協作機制</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="6">
+                <div class="item-content">
+                    <div class="checkbox"></div>
+                    <div class="item-text">
+                        <strong>專案團隊組建</strong>
+                        <span class="priority-badge priority-medium">中優先</span>
+                        <div class="item-description">是否已指定專責的專案負責人和核心團隊成員</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 技術準備度評估 -->
+        <div class="assessment-section">
+            <h2 class="section-title">💻 技術準備度評估</h2>
+
+            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="9">
+                <div class="item-content">
+                    <div class="checkbox"></div>
+                    <div class="item-text">
+                        <strong>現有系統盤點完成</strong>
+                        <span class="priority-badge priority-high">高優先</span>
+                        <div class="item-description">已清楚了解現有的IT系統、資料庫和工具現況</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="8">
+                <div class="item-content">
+                    <div class="checkbox"></div>
+                    <div class="item-text">
+                        <strong>網路與資安基礎建設</strong>
+                        <span class="priority-badge priority-high">高優先</span>
+                        <div class="item-description">網路頻寬足夠，資安政策完備，能支援新工具導入</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="6">
+                <div class="item-content">
+                    <div class="checkbox"></div>
+                    <div class="item-text">
+                        <strong>資料整合能力</strong>
+                        <span class="priority-badge priority-medium">中優先</span>
+                        <div class="item-description">現有資料是否整理完善，具備API接口或資料匯出能力</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="5">
+                <div class="item-content">
+                    <div class="checkbox"></div>
+                    <div class="item-text">
+                        <strong>備份與復原機制</strong>
+                        <span class="priority-badge priority-low">低優先</span>
+                        <div class="item-description">具備完善的資料備份和系統復原程序</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 人力準備度評估 -->
+        <div class="assessment-section">
+            <h2 class="section-title">👥 人力準備度評估</h2>
+
+            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="8">
+                <div class="item-content">
+                    <div class="checkbox"></div>
+                    <div class="item-text">
+                        <strong>員工技術接受度調查</strong>
+                        <span class="priority-badge priority-high">高優先</span>
+                        <div class="item-description">已了解員工對新技術的接受程度和學習意願</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="7">
+                <div class="item-content">
+                    <div class="checkbox"></div>
+                    <div class="item-text">
+                        <strong>核心用戶識別</strong>
+                        <span class="priority-badge priority-medium">中優先</span>
+                        <div class="item-description">已識別出願意嘗試新工具的早期採用者和意見領袖</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="6">
+                <div class="item-content">
+                    <div class="checkbox"></div>
+                    <div class="item-text">
+                        <strong>培訓資源規劃</strong>
+                        <span class="priority-badge priority-medium">中優先</span>
+                        <div class="item-description">已規劃培訓時間、場地和教學資源</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="5">
+                <div class="item-content">
+                    <div class="checkbox"></div>
+                    <div class="item-text">
+                        <strong>技術支援體系</strong>
+                        <span class="priority-badge priority-low">低優先</span>
+                        <div class="item-description">建立內部技術支援和問題解決機制</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 業務準備度評估 -->
+        <div class="assessment-section">
+            <h2 class="section-title">📈 業務準備度評估</h2>
+
+            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="9">
+                <div class="item-content">
+                    <div class="checkbox"></div>
+                    <div class="item-text">
+                        <strong>業務流程梳理完成</strong>
+                        <span class="priority-badge priority-high">高優先</span>
+                        <div class="item-description">已詳細梳理現有業務流程，識別改善機會點</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="8">
+                <div class="item-content">
+                    <div class="checkbox"></div>
+                    <div class="item-text">
+                        <strong>痛點問題明確化</strong>
+                        <span class="priority-badge priority-high">高優先</span>
+                        <div class="item-description">清楚定義希望透過新工具解決的具體問題</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="7">
+                <div class="item-content">
+                    <div class="checkbox"></div>
+                    <div class="item-text">
+                        <strong>試點場景選擇</strong>
+                        <span class="priority-badge priority-medium">中優先</span>
+                        <div class="item-description">已選定適合的試點部門和應用場景</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="6">
+                <div class="item-content">
+                    <div class="checkbox"></div>
+                    <div class="item-text">
+                        <strong>成效衡量指標</strong>
+                        <span class="priority-badge priority-medium">中優先</span>
+                        <div class="item-description">設定明確的成功指標和衡量方式</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 財務準備度評估 -->
+        <div class="assessment-section">
+            <h2 class="section-title">💰 財務準備度評估</h2>
+
+            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="8">
+                <div class="item-content">
+                    <div class="checkbox"></div>
+                    <div class="item-text">
+                        <strong>預算規劃完整</strong>
+                        <span class="priority-badge priority-high">高優先</span>
+                        <div class="item-description">已編列軟體授權、培訓、維護等完整預算</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="7">
+                <div class="item-content">
+                    <div class="checkbox"></div>
+                    <div class="item-text">
+                        <strong>ROI期望設定</strong>
+                        <span class="priority-badge priority-medium">中優先</span>
+                        <div class="item-description">設定合理的投資報酬率期望和回收期限</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checklist-item" onclick="toggleCheck(this)" data-weight="5">
+                <div class="item-content">
+                    <div class="checkbox"></div>
+                    <div class="item-text">
+                        <strong>費用控制機制</strong>
+                        <span class="priority-badge priority-low">低優先</span>
+                        <div class="item-description">建立費用監控和控制機制，避免預算超支</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="generateReport()">📊 生成評估報告</button>
+            <button class="btn btn-secondary" onclick="resetAssessment()">🔄 重新評估</button>
+        </div>
+
+        <!-- 建議區域 -->
+        <div id="recommendationHigh" class="recommendation">
+            <h3>🚀 準備度良好 (80%以上)</h3>
+            <p><strong>恭喜！</strong>您的組織已具備導入的良好條件，建議：</p>
+            <ul>
+                <li>立即啟動試點專案，選擇1-2個部門進行POC</li>
+                <li>建立完整的專案管理機制和里程碑追蹤</li>
+                <li>準備全面推廣的策略和資源</li>
+            </ul>
+        </div>
+
+        <div id="recommendationMedium" class="recommendation">
+            <h3>⚠️ 準備度中等 (50-79%)</h3>
+            <p><strong>建議先完善準備工作</strong>，重點改善：</p>
+            <ul>
+                <li>加強未完成項目的準備工作</li>
+                <li>從小規模試點開始，累積經驗</li>
+                <li>重點培養核心團隊的能力</li>
+            </ul>
+        </div>
+
+        <div id="recommendationLow" class="recommendation">
+            <h3>🛑 準備度不足 (50%以下)</h3>
+            <p><strong>建議暫緩導入</strong>，優先處理：</p>
+            <ul>
+                <li>獲得高階管理層的明確支持</li>
+                <li>完成基礎建設和人員培訓</li>
+                <li>建立變革管理機制</li>
+            </ul>
+        </div>
+
+        <!-- 期待管理矩陣 -->
+        <div class="assessment-section">
+            <h2 class="section-title">🎯 合理期待設定</h2>
+            <div class="expectation-matrix">
+                <div class="expectation-card">
+                    <h4>短期效益 (1-3個月)</h4>
+                    <p>✅ 流程自動化<br>✅ 重複工作減少<br>✅ 團隊學習成長</p>
+                </div>
+                <div class="expectation-card">
+                    <h4>中期效益 (3-12個月)</h4>
+                    <p>📈 效率提升20-40%<br>📊 決策速度加快<br>🔄 流程標準化</p>
+                </div>
+                <div class="expectation-card">
+                    <h4>長期效益 (1年以上)</h4>
+                    <p>🚀 創新能力提升<br>💰 成本大幅降低<br>🎯 競爭優勢確立</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let totalWeight = 0;
+        let checkedWeight = 0;
+
+        // 計算總權重
+        document.querySelectorAll('.checklist-item').forEach(item => {
+            totalWeight += parseInt(item.dataset.weight);
+        });
+
+        function toggleCheck(element) {
+            const checkbox = element.querySelector('.checkbox');
+            const weight = parseInt(element.dataset.weight);
+
+            if (element.classList.contains('checked')) {
+                element.classList.remove('checked');
+                checkbox.classList.remove('checked');
+                checkbox.innerHTML = '';
+                checkedWeight -= weight;
+            } else {
+                element.classList.add('checked');
+                checkbox.classList.add('checked');
+                checkbox.innerHTML = '✓';
+                checkedWeight += weight;
+            }
+
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const percentage = Math.round((checkedWeight / totalWeight) * 100);
+            document.getElementById('overallProgress').style.width = percentage + '%';
+            document.getElementById('readinessScore').textContent = percentage + '%';
+
+            let status = '';
+            let statusColor = '';
+
+            if (percentage >= 80) {
+                status = '準備度良好，可以開始導入！';
+                statusColor = '#00b894';
+            } else if (percentage >= 50) {
+                status = '準備度中等，建議完善後再導入';
+                statusColor = '#fdcb6e';
+            } else {
+                status = '準備度不足，需要加強準備工作';
+                statusColor = '#e17055';
+            }
+
+            const statusElement = document.getElementById('readinessStatus');
+            statusElement.textContent = status;
+            statusElement.style.color = statusColor;
+        }
+
+        function generateReport() {
+            const percentage = Math.round((checkedWeight / totalWeight) * 100);
+
+            // 隱藏所有建議
+            document.querySelectorAll('.recommendation').forEach(rec => {
+                rec.classList.remove('show');
+            });
+
+            // 顯示對應建議
+            if (percentage >= 80) {
+                document.getElementById('recommendationHigh').classList.add('show');
+            } else if (percentage >= 50) {
+                document.getElementById('recommendationMedium').classList.add('show');
+            } else {
+                document.getElementById('recommendationLow').classList.add('show');
+            }
+
+            // 滾動到建議區域
+            document.querySelector('.recommendation.show').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+
+        function resetAssessment() {
+            document.querySelectorAll('.checklist-item').forEach(item => {
+                item.classList.remove('checked');
+                const checkbox = item.querySelector('.checkbox');
+                checkbox.classList.remove('checked');
+                checkbox.innerHTML = '';
+            });
+
+            document.querySelectorAll('.recommendation').forEach(rec => {
+                rec.classList.remove('show');
+            });
+
+            checkedWeight = 0;
+            updateProgress();
+        }
+    </script>
+</body>
+</html>
