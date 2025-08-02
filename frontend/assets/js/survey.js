@@ -12,11 +12,15 @@ const SurveyManager = {
     
     // 初始化問卷
     init(surveyType) {
+        console.log('初始化問卷，類型:', surveyType);
         this.currentSurvey = surveyType;
         this.sessionId = getOrCreateSessionId();
         this.surveyData = {};
         this.totalQuestions = this.getTotalQuestions(surveyType);
         this.answeredQuestions = 0;
+        
+        console.log('會話ID:', this.sessionId);
+        console.log('總題數:', this.totalQuestions);
         
         // 建立分析會話
         this.createSession();
@@ -41,17 +45,24 @@ const SurveyManager = {
     // 建立分析會話
     async createSession() {
         try {
-            const response = await apiCall('survey.php', {
+            console.log('建立會話，分析類型:', this.currentSurvey);
+            const requestData = {
+                action: 'create_session',
+                analysis_type: this.currentSurvey,
+                user_id: AI2Job.isLoggedIn ? AI2Job.user?.user_id : null
+            };
+            console.log('建立會話請求資料:', requestData);
+            
+            const response = await apiCall('test_api.php', {
                 method: 'POST',
-                body: {
-                    action: 'create_session',
-                    analysis_type: this.currentSurvey,
-                    user_id: AI2Job.isLoggedIn ? AI2Job.user?.user_id : null
-                }
+                body: requestData
             });
             
             if (response.success) {
                 console.log('會話建立成功:', response.data.session_id);
+                this.sessionId = response.data.session_id; // 更新會話ID
+            } else {
+                console.error('會話建立失敗:', response);
             }
         } catch (error) {
             console.error('建立會話失敗:', error);
@@ -234,6 +245,9 @@ const SurveyManager = {
     // 提交問卷
     async submitSurvey() {
         try {
+            console.log('開始提交問卷，類型:', this.currentSurvey);
+            console.log('問卷資料:', this.surveyData);
+            
             // 驗證資料完整性
             if (!this.validateSurveyData()) {
                 return;
@@ -241,6 +255,23 @@ const SurveyManager = {
             
             // 準備提交資料
             const submitData = this.prepareSubmitData();
+            console.log('準備提交的資料:', submitData);
+            
+            // 如果沒有設定問卷類型，嘗試從頁面偵測
+            if (!this.currentSurvey) {
+                // 從頁面標題或URL偵測問卷類型
+                const path = window.location.pathname;
+                if (path.includes('index.html') || path.endsWith('/') || path.includes('frontend')) {
+                    this.currentSurvey = 'work_pain';
+                } else if (path.includes('boss-analy')) {
+                    this.currentSurvey = 'enterprise_readiness';
+                } else if (path.includes('learn-method-analy')) {
+                    this.currentSurvey = 'learning_style';
+                } else {
+                    this.currentSurvey = 'work_pain'; // 預設值
+                }
+                console.log('自動偵測問卷類型:', this.currentSurvey);
+            }
             
             // 呼叫對應的API
             let apiAction = '';
@@ -255,15 +286,22 @@ const SurveyManager = {
                     apiAction = 'save_learning_style';
                     break;
                 default:
-                    throw new Error('未知的問卷類型');
+                    throw new Error(`未知的問卷類型: ${this.currentSurvey}`);
             }
             
-            const response = await apiCall('survey.php', {
+            console.log('API Action:', apiAction);
+            
+            // 構建完整的請求資料
+            const requestData = {
+                action: apiAction,
+                ...submitData
+            };
+            
+            console.log('完整請求資料:', requestData);
+            
+            const response = await apiCall('test_api.php', {
                 method: 'POST',
-                body: {
-                    action: apiAction,
-                    ...submitData
-                }
+                body: requestData
             });
             
             if (response.success) {

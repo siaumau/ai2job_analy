@@ -4,13 +4,13 @@
 
 // API管理器
 const APIManager = {
-    baseURL: '/backend/api/',
+    baseURL: '/backend/',
     
     // 問卷相關API
     survey: {
         // 建立會話
         async createSession(analysisType, userId = null) {
-            return await apiCall('survey.php', {
+            return await apiCall('test_api.php', {
                 method: 'POST',
                 body: {
                     action: 'create_session',
@@ -22,7 +22,7 @@ const APIManager = {
         
         // 儲存工作痛點分析
         async saveWorkPainAnalysis(data) {
-            return await apiCall('survey.php', {
+            return await apiCall('test_api.php', {
                 method: 'POST',
                 body: {
                     action: 'save_work_pain',
@@ -33,7 +33,7 @@ const APIManager = {
         
         // 儲存企業準備度評估
         async saveEnterpriseReadiness(data) {
-            return await apiCall('survey.php', {
+            return await apiCall('test_api.php', {
                 method: 'POST',
                 body: {
                     action: 'save_enterprise_readiness',
@@ -44,7 +44,7 @@ const APIManager = {
         
         // 儲存學習風格測試
         async saveLearningStyle(data) {
-            return await apiCall('survey.php', {
+            return await apiCall('test_api.php', {
                 method: 'POST',
                 body: {
                     action: 'save_learning_style',
@@ -55,7 +55,7 @@ const APIManager = {
         
         // 取得分析結果
         async getResult(sessionId, type) {
-            return await apiCall(`survey.php?action=get_result&session_id=${sessionId}&type=${type}`);
+            return await apiCall(`test_api.php?action=get_result&session_id=${sessionId}&type=${type}`);
         },
         
         // 取得使用者歷史記錄
@@ -70,7 +70,7 @@ const APIManager = {
                 params.append('type', type);
             }
             
-            return await apiCall(`survey.php?${params.toString()}`);
+            return await apiCall(`test_api.php?${params.toString()}`);
         }
     },
     
@@ -124,23 +124,23 @@ const APIManager = {
     auth: {
         // 檢查登入狀態
         async checkStatus() {
-            return await apiCall('auth.php?action=status');
+            return await apiCall('test_auth.php?action=status');
         },
         
         // 發起LINE登入
         async initiateLogin(redirectUrl = null) {
             const params = redirectUrl ? `?redirect_url=${encodeURIComponent(redirectUrl)}` : '';
-            return await apiCall(`auth.php?action=login${params}`);
+            return await apiCall(`test_auth.php?action=login${params}`);
         },
         
         // 登出
         async logout() {
-            return await apiCall('auth.php?action=logout');
+            return await apiCall('test_auth.php?action=logout');
         },
         
         // 關聯會話到使用者
         async linkSession(sessionId) {
-            return await apiCall('auth.php', {
+            return await apiCall('test_auth.php', {
                 method: 'POST',
                 body: {
                     action: 'link_session',
@@ -151,7 +151,7 @@ const APIManager = {
         
         // 驗證Token
         async verifyToken(accessToken) {
-            return await apiCall('auth.php', {
+            return await apiCall('test_auth.php', {
                 method: 'POST',
                 body: {
                     action: 'verify_token',

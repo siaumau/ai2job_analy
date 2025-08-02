@@ -3,7 +3,7 @@
  * 資料庫連線配置
  */
 
-define('DB_HOST', 'mariadb');
+define('DB_HOST', 'localhost');
 define('DB_NAME', 'ai');
 define('DB_USER', 'ai');
 define('DB_PASS', 'Km16649165!');

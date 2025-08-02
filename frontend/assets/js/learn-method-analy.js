@@ -122,7 +122,7 @@ async function calculateResult() {
 
 async function saveAnalysisResult(resultData) {
     try {
-        const response = await fetch('../../backend/api/survey.php?action=save_learning_style', {
+        const response = await fetch('../../backend/test_api.php?action=save_learning_style', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -140,7 +140,7 @@ async function saveAnalysisResult(resultData) {
 
 async function checkAuthStatus() {
     try {
-        const response = await fetch('../../backend/api/auth.php?action=status');
+        const response = await fetch('../../backend/test_auth.php?action=status');
         const data = await response.json();
         return data.data;
     } catch (error) {
@@ -151,7 +151,7 @@ async function checkAuthStatus() {
 
 function initiateLineLogin() {
     const redirectUrl = window.location.href.split('?')[0];
-    window.location.href = `../../backend/api/auth.php?action=login&redirect_url=${encodeURIComponent(redirectUrl)}`;
+    window.location.href = `../../backend/test_auth.php?action=login&redirect_url=${encodeURIComponent(redirectUrl)}`;
 }
 
 let sessionId = null;
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function createSession() {
     try {
-        const response = await fetch('../../backend/api/survey.php?action=create_session', {
+        const response = await fetch('../../backend/test_api.php?action=create_session', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

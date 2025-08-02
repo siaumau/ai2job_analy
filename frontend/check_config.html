@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API 設定檢查</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-2xl font-bold mb-6">🔧 API 設定檢查</h1>
+        
+        <div class="grid md:grid-cols-2 gap-4 mb-6">
+            <button onclick="testAPI('test_api.php')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                測試問卷 API
+            </button>
+            <button onclick="testAPI('test_auth.php')" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                測試認證 API
+            </button>
+        </div>
+        
+        <div id="results" class="border rounded p-4 bg-gray-50 min-h-32">
+            <p class="text-gray-500">點擊按鈕測試 API...</p>
+        </div>
+    </div>
+
+    <script src="assets/js/common.js"></script>
+    <script>
+        async function testAPI(endpoint) {
+            const results = document.getElementById('results');
+            results.innerHTML = `<p class="text-blue-500">正在測試 ${endpoint}...</p>`;
+            
+            try {
+                const response = await fetch(`../backend/${endpoint}?action=status`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                results.innerHTML = `
+                    <h3 class="font-bold text-green-600 mb-2">✅ ${endpoint} 測試成功</h3>
+                    <pre class="bg-gray-800 text-green-400 p-3 rounded text-sm overflow-auto">${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                results.innerHTML = `
+                    <h3 class="font-bold text-red-600 mb-2">❌ ${endpoint} 測試失敗</h3>
+                    <pre class="bg-gray-800 text-red-400 p-3 rounded text-sm">${error.message}</pre>
+                `;
+            }
+        }
+        
+        // 顯示目前配置
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('API 基礎 URL:', AI2Job?.API_BASE_URL || '未定義');
+        });
+    </script>
+</body>
+</html>

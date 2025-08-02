@@ -13,7 +13,7 @@ date_default_timezone_set('Asia/Taipei');
 // 系統設定
 define('SYSTEM_NAME', 'AI2Job 職場分析系統');
 define('SYSTEM_VERSION', '1.0.0');
-define('SYSTEM_URL', 'https://yourdomain.com'); // 請更改為實際網域
+define('SYSTEM_URL', 'http://localhost'); // 請更改為實際網域
 
 // API設定
 define('API_BASE_URL', SYSTEM_URL . '/backend/api/');

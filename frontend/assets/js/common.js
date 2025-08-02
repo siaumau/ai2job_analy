@@ -4,7 +4,7 @@
 
 // 全域變數
 const AI2Job = {
-    API_BASE_URL: '/backend/api/',
+    API_BASE_URL: '/backend/',
     currentSessionId: null,
     isLoggedIn: false,
     user: null
@@ -372,7 +372,7 @@ function scrollToElement(element, offset = 0) {
  */
 async function checkAuthStatus() {
     try {
-        const response = await apiCall('auth.php?action=status');
+        const response = await apiCall('test_auth.php?action=status');
         
         if (response.success) {
             AI2Job.isLoggedIn = response.data.is_logged_in;
@@ -431,7 +431,7 @@ function updateAuthUI() {
 async function login() {
     try {
         const currentUrl = window.location.href;
-        const response = await apiCall('auth.php?action=login&redirect_url=' + encodeURIComponent(currentUrl));
+        const response = await apiCall('test_auth.php?action=login&redirect_url=' + encodeURIComponent(currentUrl));
         
         if (response.success && response.data.login_url) {
             window.location.href = response.data.login_url;
@@ -446,7 +446,7 @@ async function login() {
  */
 async function logout() {
     try {
-        await apiCall('auth.php?action=logout');
+        await apiCall('test_auth.php?action=logout');
         
         AI2Job.isLoggedIn = false;
         AI2Job.user = null;
@@ -472,7 +472,7 @@ async function linkSessionToUser() {
     }
     
     try {
-        const response = await apiCall('auth.php', {
+        const response = await apiCall('test_auth.php', {
             method: 'POST',
             body: {
                 action: 'link_session',
