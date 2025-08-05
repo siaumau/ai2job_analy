@@ -460,7 +460,20 @@
 
     <style>
         .option.selected {
-            @apply border-accent bg-accent text-white transform scale-105;
+            border-color: #ff6b6b !important;
+            background-color: #ff6b6b !important;
+            color: white !important;
+            transform: scale(1.05) !important;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3) !important;
+        }
+        
+        .option.selected:hover {
+            background-color: #e63946 !important;
+            border-color: #e63946 !important;
+        }
+        
+        .option.selected span {
+            color: white !important;
         }
         
         .slider::-webkit-slider-thumb {

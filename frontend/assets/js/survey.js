@@ -106,14 +106,20 @@ const SurveyManager = {
         const group = element.getAttribute('data-group');
         const value = element.getAttribute('data-value');
         
+        console.log('Single select clicked:', group, value, element);
+        
         if (!group || !value) return;
         
         // 移除同組其他選項的選中狀態
         const groupElements = document.querySelectorAll(`[data-group="${group}"]`);
-        groupElements.forEach(el => el.classList.remove('selected'));
+        groupElements.forEach(el => {
+            el.classList.remove('selected');
+            console.log('Removed selected from:', el);
+        });
         
         // 選中當前選項
         element.classList.add('selected');
+        console.log('Added selected to:', element);
         
         // 更新資料
         const oldValue = this.surveyData[group];
@@ -131,6 +137,8 @@ const SurveyManager = {
         const group = element.getAttribute('data-group');
         const value = element.getAttribute('data-value');
         
+        console.log('Multiple select clicked:', group, value, element);
+        
         if (!group || !value) return;
         
         // 初始化陣列
@@ -140,6 +148,7 @@ const SurveyManager = {
         
         // 切換選中狀態
         element.classList.toggle('selected');
+        console.log('Toggled selected on:', element, 'Has selected:', element.classList.contains('selected'));
         
         const index = this.surveyData[group].indexOf(value);
         if (index > -1) {
